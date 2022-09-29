@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -15,5 +16,10 @@ public class Reception : Singleton<Reception>
     public Vector3 WaitPos()
     {
         return waitTransform.position + (Vector3.right * -1.5f * customers.Count);
+    }
+
+    public void RemoveCustomer(CustomerBehaviour customer)
+    {
+        customers.Remove(customer);
     }
 }

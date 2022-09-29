@@ -9,7 +9,7 @@ public class Interactor : MonoBehaviour
         IInteractable interactable = other.GetComponentInChildren<IInteractable>();
         if(interactable != null)
         {
-            interactable.Interact(this);
+            interactable.Interact(ManagerBehaviour.Instance);
         }
     }
 
@@ -18,7 +18,7 @@ public class Interactor : MonoBehaviour
         IInteractable interactable = collision.collider.GetComponentInChildren<IInteractable>();
         if (interactable != null)
         {
-            interactable.Interact(this);
+            interactable.Interact(ManagerBehaviour.Instance);
         }
     }
     private void OnTriggerExit(Collider other)

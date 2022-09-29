@@ -15,7 +15,10 @@ public class Wait : IState
         customerBehaviour.getColl.enabled = true;
     }
 
-    public void OnExit() { }
+    public void OnExit() 
+    {
+        Reception.Instance.RemoveCustomer(customerBehaviour);
+    }
 
     public void Tick()
     {

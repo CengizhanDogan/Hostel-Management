@@ -12,10 +12,10 @@ public class ReceptionBehaviour : IState
     private CustomerBehaviour customerBehaviour;
     public bool end;
 
-    public ReceptionBehaviour(NavMeshAgent navMeshAgent, Transform transform, CustomerBehaviour customerBehaviour)
+    public ReceptionBehaviour(NavMeshAgent navMeshAgent, CustomerBehaviour customerBehaviour)
     {
         this.navMeshAgent = navMeshAgent;
-        this.transform = transform;
+        this.transform = customerBehaviour.transform;
         this.customerBehaviour = customerBehaviour;
 
         reception = Reception.Instance;
