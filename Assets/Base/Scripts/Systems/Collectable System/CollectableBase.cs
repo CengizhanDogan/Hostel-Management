@@ -2,11 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectableBase : MonoBehaviour, ICollectable
+public class CollectableBase : MonoBehaviour, IInteractable
 {
 	public GameObject CollectEffectPrefab;
 	[SerializeField] private bool uiCollectEffect;
-	public virtual void Collect(Collector collector)
+	public virtual void Interact(ManagerBehaviour manager)
 	{
 		if (CollectEffectPrefab != null)
 		{

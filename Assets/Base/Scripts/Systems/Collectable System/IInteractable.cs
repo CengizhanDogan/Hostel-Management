@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface ICollectable 
+public interface IInteractable 
 {
-    void Collect(Collector collector);
+    void Interact(ManagerBehaviour manager);
 }
