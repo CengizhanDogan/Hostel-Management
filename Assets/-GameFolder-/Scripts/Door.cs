@@ -40,7 +40,6 @@ public class Door : MonoBehaviour, IInteractable, IExitable
     {
         while (!exited)
         {
-            Debug.Log("Spend");
             if (PlayerPrefs.GetInt(PlayerPrefKeys.Coin) > 0 && room.roomValue > 0)
             {
                 PlayerPrefs.SetInt(PlayerPrefKeys.Coin, PlayerPrefs.GetInt(PlayerPrefKeys.Coin) - 1);
@@ -62,7 +61,7 @@ public class Door : MonoBehaviour, IInteractable, IExitable
                 });
                 longWalls.transform.DOMoveY(-3, 1f).SetEase(Ease.OutBack);
             }
-            yield return new WaitForSeconds(0.25f);
+            yield return new WaitForSeconds(0.15f);
         }
     }
     public void Exit()
