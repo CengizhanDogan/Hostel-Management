@@ -17,7 +17,7 @@ public class CustomerFollow : IState
     }
     public void OnEnter() { }
 
-    public void OnExit() { }
+    public void OnExit() { navMeshAgent.isStopped = false; }
 
     public void Tick()
     {

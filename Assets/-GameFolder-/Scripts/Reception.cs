@@ -6,6 +6,7 @@ using UnityEngine;
 public class Reception : Singleton<Reception>
 {
     [SerializeField] private Transform waitTransform;
+    [SerializeField] private Transform lookTransform;
 
     private List<CustomerBehaviour> customers = new List<CustomerBehaviour>();
 
@@ -17,7 +18,11 @@ public class Reception : Singleton<Reception>
     {
         return waitTransform.position + (Vector3.right * -1.5f * customers.Count);
     }
-
+    public Vector3 LookPos(float yPos)
+    {
+        var pos = lookTransform.position; pos.y = yPos;
+        return pos;
+    }
     public void RemoveCustomer(CustomerBehaviour customer)
     {
         customers.Remove(customer);

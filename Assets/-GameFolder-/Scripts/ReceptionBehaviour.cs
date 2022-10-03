@@ -27,7 +27,7 @@ public class ReceptionBehaviour : IState
 
     public void OnExit()
     {
-        transform.DORotate(Vector3.up * -270, 0.5f);
+        transform.DOLookAt(reception.LookPos(transform.position.y), 0.5f);
         reception.AddCustomer(customerBehaviour);
     }
 
