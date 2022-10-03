@@ -555,7 +555,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomValue: 10
   door: {fileID: 0}
-  roomTransform: {fileID: 0}
   available: 0
   doorRb: {fileID: 0}
   longWalls: {fileID: 0}
@@ -1690,7 +1689,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomValue: 10
   door: {fileID: 0}
-  roomTransform: {fileID: 204434566}
   available: 0
   doorRb: {fileID: 305027072678741632}
   longWalls: {fileID: 1829997989}
@@ -1925,9 +1923,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 3820351794969896123, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
-      propertyPath: m_IsKinematic
+    - target: {fileID: 97674352117081498, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
+      propertyPath: m_Enabled
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3271625063334443833, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3271625063334443833, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3271625063334443833, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4868536708637665212, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7349093536921170641, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
       propertyPath: m_Name
@@ -1977,8 +1991,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 4882994281303194308, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
+--- !u!1 &735554824 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2750842877744521603, guid: 9d3df3522fc4bcb4a81a68985b5677a2, type: 3}
+  m_PrefabInstance: {fileID: 735554823}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &735554825
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 735554824}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 52314477548030a46a659830c0276eb8, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1001 &761364157
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4069,7 +4108,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   roomValue: 10
   door: {fileID: 0}
-  roomTransform: {fileID: 0}
   available: 0
   doorRb: {fileID: 7181955214784840760}
   longWalls: {fileID: 1358892564}
@@ -6982,7 +7020,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5820355888203147899}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.00000017881393, y: 0, z: -0.1250003}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 570905963}

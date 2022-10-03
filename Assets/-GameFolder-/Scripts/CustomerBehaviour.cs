@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 public class CustomerBehaviour : MonoBehaviour, IInteractable
 {
+    public CustomerAnimation customerAnimation;
     private StateMachine stateMachine;
     private RoomBehaviour roomBehaviour;
     public float patiance;
@@ -16,16 +17,18 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable
 
     private void Awake()
     {
+        customerAnimation = GetComponent<CustomerAnimation>();
         var navMeshAgent = GetComponent<NavMeshAgent>();
 
         roomBehaviour = gameObject.AddComponent<RoomBehaviour>();
         roomBehaviour.SetRoomTime(roomTime);
+        roomBehaviour.SetCustomerBehaviour(this);
 
         stateMachine = new StateMachine();
 
         var receptionBehavior = new ReceptionBehaviour(navMeshAgent, this);
         var wait = new Wait(this);
-        var customerFolow = new CustomerFollow(navMeshAgent);
+        var customerFolow = new CustomerFollow(navMeshAgent, this);
 
         At(receptionBehavior, wait, ReachedReception());
         At(wait, customerFolow, Getted());
@@ -33,7 +36,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable
 
         stateMachine.SetState(receptionBehavior);
 
-        void At (IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
+        void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
         Func<bool> ReachedReception() => () => receptionBehavior.end;
         Func<bool> Getted() => () => interacted;
@@ -49,9 +52,9 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable
         manager.SetCustomer(this);
     }
 
-    public void SetToRoom(Room room) 
+    public void SetToRoom(Room room)
     {
         roomBehaviour.SetRoom(room);
-        hasRoom = true; 
+        hasRoom = true;
     }
 }

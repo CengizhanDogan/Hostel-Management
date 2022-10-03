@@ -8,6 +8,7 @@ public class RoomBehaviour : MonoBehaviour, IState
 {
     private StateMachine stateMachine;
 
+    private CustomerBehaviour customerBehaviour;
     private Room myRoom;
     private float roomTime;
     private NavMeshAgent navMeshAgent;
@@ -16,11 +17,13 @@ public class RoomBehaviour : MonoBehaviour, IState
 
     public void SetRoom(Room room) { myRoom = room; }
     public void SetRoomTime(float time) { roomTime = time; }
+    public void SetCustomerBehaviour(CustomerBehaviour customerBehaviour) { this.customerBehaviour = customerBehaviour; }
 
     public void OnEnter()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
         firstMovement = true;
+        customerBehaviour.customerAnimation.SetWalk(true);
         navMeshAgent.SetDestination(myRoom.transform.position);
     }
 
@@ -37,6 +40,7 @@ public class RoomBehaviour : MonoBehaviour, IState
 
     private void SetStateMachine()
     {
+        customerBehaviour.customerAnimation.SetWalk(false);
         Debug.Log("Wonder around the room");
         stateMachine = new StateMachine();
     }
