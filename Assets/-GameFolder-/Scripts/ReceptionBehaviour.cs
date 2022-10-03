@@ -22,11 +22,13 @@ public class ReceptionBehaviour : IState
     }
     public void OnEnter()
     {
+        customerBehaviour.customerAnimation.SetWalk(true);
         navMeshAgent.SetDestination(reception.WaitPos());
     }
 
     public void OnExit()
     {
+        customerBehaviour.customerAnimation.SetWalk(false);
         transform.DOLookAt(reception.LookPos(transform.position.y), 0.5f);
         reception.AddCustomer(customerBehaviour);
     }

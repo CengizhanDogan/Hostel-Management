@@ -21,7 +21,6 @@ public class Door : MonoBehaviour, IInteractable
         {
             if (manager.GetCustomer() == null || room.GetCustomer() != null) return;
 
-            Debug.Log("SetCustomer");
             var customer = manager.GetCustomer();
             customer.SetToRoom(room);
             room.SetCustomer(customer);
