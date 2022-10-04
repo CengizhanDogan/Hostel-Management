@@ -5,9 +5,13 @@ using UnityEngine;
 public class Wait : IState
 {
     private CustomerBehaviour customerBehaviour;
-    public Wait(CustomerBehaviour customerBehaviour)
+    private ReceptionBehaviour reception;
+
+    public bool reorder;
+    public Wait(CustomerBehaviour customerBehaviour, ReceptionBehaviour reception)
     {
         this.customerBehaviour = customerBehaviour;
+        this.reception = reception;
     }
 
     public void OnEnter() 
@@ -17,11 +21,16 @@ public class Wait : IState
 
     public void OnExit() 
     {
-        Reception.Instance.RemoveCustomer(customerBehaviour);
+        
     }
 
     public void Tick()
     {
         customerBehaviour.patiance -= 0.01f;
+        if (reorder)
+        {
+            reorder = false;
+            reception.end = false;
+        }
     }
 }

@@ -12,10 +12,14 @@ public class CustomerSpawner : MonoBehaviour
 
     IEnumerator Spawn()
     {
-        while (true)
+        for (int i = 0; i < 5; i++)
         {
-            yield return new WaitForSeconds(7.5f);
-            Instantiate(customer, transform.position, customer.gameObject.transform.rotation);
+            var customerClone = Instantiate(customer, transform.position, customer.gameObject.transform.rotation);
+            yield return new WaitForSeconds(1f);
         }
+        //while (true)
+        //{
+            
+        //}
     }
 }

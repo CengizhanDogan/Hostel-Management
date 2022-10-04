@@ -22,8 +22,10 @@ public class ReceptionBehaviour : IState
     }
     public void OnEnter()
     {
+        if(!reception.customers.Contains(customerBehaviour)) reception.AddCustomer(customerBehaviour);
         customerBehaviour.customerAnimation.SetWalk(true);
-        navMeshAgent.SetDestination(reception.WaitPos());
+        Debug.Log(reception.customers.IndexOf(customerBehaviour));
+        navMeshAgent.SetDestination(reception.WaitPos(customerBehaviour));
         customerBehaviour.getColl.enabled = false;
     }
 
@@ -31,7 +33,6 @@ public class ReceptionBehaviour : IState
     {
         customerBehaviour.customerAnimation.SetWalk(false);
         transform.DOLookAt(reception.LookPos(transform.position.y), 0.5f);
-        reception.AddCustomer(customerBehaviour);
         customerBehaviour.getColl.enabled = true;
     }
 

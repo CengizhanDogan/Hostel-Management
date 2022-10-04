@@ -11,7 +11,6 @@ public class RoomBehaviour : MonoBehaviour, IState
     private CustomerBehaviour customerBehaviour;
     private Room room;
     private float roomTime;
-    private float wonderValue;
     private NavMeshAgent navMeshAgent;
 
     private bool firstMovement;
@@ -44,27 +43,24 @@ public class RoomBehaviour : MonoBehaviour, IState
             stateMachine.Tick();
         }
 
-        wonderValue = UnityEngine.Random.value;
+        
     }
 
     private void SetStateMachine()
     {
         customerBehaviour.customerAnimation.SetWalk(false);
-        Debug.Log("Wonder around the room");
+
         stateMachine = new StateMachine();
 
         var wonderRoom = new WonderRoom(navMeshAgent, room, customerBehaviour);
 
-        //At(wonderRoom, sleep, Wonder());
-
         stateMachine.SetState(wonderRoom);
 
-        stateMachine.AddAnyTransition(wonderRoom, Wonder());
+        //stateMachine.AddAnyTransition(wonderRoom, Wonder());
         //void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
         //Func<bool> Sleep() => () => !navMeshAgent.hasPath && UnityEngine.Random.value < 0.7f;
     }
-    Func<bool> Wonder() => () => !navMeshAgent.hasPath && wonderValue > 0.85f;
 }
 
 public class WonderRoom : IState
@@ -72,6 +68,8 @@ public class WonderRoom : IState
     private NavMeshAgent navMeshAgent;
     private CustomerBehaviour customerBehaviour;
     private Room room;
+
+    private float wonderValue;
 
     public WonderRoom(NavMeshAgent navMeshAgent, Room room, CustomerBehaviour customerBehaviour)
     {
@@ -81,11 +79,7 @@ public class WonderRoom : IState
     }
     public void OnEnter()
     {
-        customerBehaviour.customerAnimation.SetWalk(true);
-        var randomPos = room.transform.position;
-        randomPos.x += UnityEngine.Random.Range(-2f, 2f);
-        randomPos.z += UnityEngine.Random.Range(-2f, 2f);
-        navMeshAgent.SetDestination(randomPos);
+        Wonder();
     }
 
     public void OnExit()
@@ -98,6 +92,17 @@ public class WonderRoom : IState
         if (!navMeshAgent.hasPath)
         {
             customerBehaviour.customerAnimation.SetWalk(false);
+            wonderValue = UnityEngine.Random.value;
+            if (wonderValue > 0.995f) Wonder();
         }
+    }
+
+    private void Wonder()
+    {
+        customerBehaviour.customerAnimation.SetWalk(true);
+        var randomPos = room.transform.position;
+        randomPos.x += UnityEngine.Random.Range(-2f, 2f);
+        randomPos.z += UnityEngine.Random.Range(-2f, 2f);
+        navMeshAgent.SetDestination(randomPos);
     }
 }
