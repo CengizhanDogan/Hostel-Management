@@ -33,6 +33,7 @@ public class Room : MonoBehaviour, IPurchasable
         transform.DOMoveY(0, 1f).SetEase(Ease.OutBack).OnComplete(() =>
         {
             available = true;
+            door.coll.enabled = true;
             doorRb.isKinematic = false;
         });
         longWalls.transform.DOMoveY(-3, 1f).SetEase(Ease.OutBack);

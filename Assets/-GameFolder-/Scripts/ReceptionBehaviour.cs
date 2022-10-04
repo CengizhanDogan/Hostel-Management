@@ -24,6 +24,7 @@ public class ReceptionBehaviour : IState
     {
         customerBehaviour.customerAnimation.SetWalk(true);
         navMeshAgent.SetDestination(reception.WaitPos());
+        customerBehaviour.getColl.enabled = false;
     }
 
     public void OnExit()
@@ -31,6 +32,7 @@ public class ReceptionBehaviour : IState
         customerBehaviour.customerAnimation.SetWalk(false);
         transform.DOLookAt(reception.LookPos(transform.position.y), 0.5f);
         reception.AddCustomer(customerBehaviour);
+        customerBehaviour.getColl.enabled = true;
     }
 
     public void Tick() 

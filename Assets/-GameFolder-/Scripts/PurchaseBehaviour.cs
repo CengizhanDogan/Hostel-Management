@@ -1,12 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 using DG.Tweening;
 
 public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 {
     private bool exited;
 
+    [SerializeField] private TextMeshPro textMesh;
+    [SerializeField] private Transform line;
     [SerializeField] private GameObject roomObject;
 
     private IPurchasable room;
@@ -18,6 +21,9 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
         room = roomObject.GetComponent<IPurchasable>();
         room.GetCost(out var cost);
         roomValue = cost;
+        textMesh.text = roomValue.ToString();
+        var scale = line.localScale + Vector3.one * 0.1f;
+        line.DOScale(scale, 0.5f).SetLoops(-1, LoopType.Yoyo);
     }
     public void Interact(ManagerBehaviour manager)
     {
@@ -32,6 +38,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
             {
                 PlayerPrefs.SetInt(PlayerPrefKeys.Coin, PlayerPrefs.GetInt(PlayerPrefKeys.Coin) - 1);
                 roomValue -= 1;
+                textMesh.text = roomValue.ToString();
 
                 var spawnPos = manager.transform.position; spawnPos.y += 1;
                 var cash = PoolingSystem.Instance.InstantiateAPS("Cash", spawnPos);
@@ -49,7 +56,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
                 room.GetPurchased();
                 Destroy(gameObject);
             }
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(0.1f);
         }
     }
     public void Exit()

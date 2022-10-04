@@ -11,9 +11,11 @@ public class RoomBehaviour : MonoBehaviour, IState
     private CustomerBehaviour customerBehaviour;
     private Room room;
     private float roomTime;
+    private float wonderValue;
     private NavMeshAgent navMeshAgent;
 
     private bool firstMovement;
+    private bool tick;
 
     public void SetRoom(Room room) { this.room = room; }
     public void SetRoomTime(float time) { roomTime = time; }
@@ -34,8 +36,15 @@ public class RoomBehaviour : MonoBehaviour, IState
         if (firstMovement && !navMeshAgent.hasPath)
         {
             firstMovement = false;
+            tick = true;
             SetStateMachine();
         }
+        if (tick)
+        {
+            stateMachine.Tick();
+        }
+
+        wonderValue = UnityEngine.Random.value;
     }
 
     private void SetStateMachine()
@@ -53,9 +62,9 @@ public class RoomBehaviour : MonoBehaviour, IState
         stateMachine.AddAnyTransition(wonderRoom, Wonder());
         //void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
-        Func<bool> Wonder() => () => !navMeshAgent.hasPath && UnityEngine.Random.value > 0.85f;
         //Func<bool> Sleep() => () => !navMeshAgent.hasPath && UnityEngine.Random.value < 0.7f;
     }
+    Func<bool> Wonder() => () => !navMeshAgent.hasPath && wonderValue > 0.85f;
 }
 
 public class WonderRoom : IState
@@ -66,7 +75,7 @@ public class WonderRoom : IState
 
     public WonderRoom(NavMeshAgent navMeshAgent, Room room, CustomerBehaviour customerBehaviour)
     {
-        this.navMeshAgent = navMeshAgent; 
+        this.navMeshAgent = navMeshAgent;
         this.room = room;
         this.customerBehaviour = customerBehaviour;
     }

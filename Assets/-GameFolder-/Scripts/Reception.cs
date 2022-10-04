@@ -16,7 +16,7 @@ public class Reception : Singleton<Reception>
     }
     public Vector3 WaitPos()
     {
-        return waitTransform.position + (Vector3.right * -1.5f * customers.Count);
+        return waitTransform.position + (Vector3.forward * -1f * customers.Count) + (Vector3.right * 1.8f * customers.Count);
     }
     public Vector3 LookPos(float yPos)
     {

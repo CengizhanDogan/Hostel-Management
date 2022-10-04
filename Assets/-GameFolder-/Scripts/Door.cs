@@ -7,9 +7,11 @@ public class Door : MonoBehaviour, IInteractable
 {
     [SerializeField] private Room room;
 
+    [HideInInspector] public Collider coll;
     private void Start()
     {
         room.door = this;
+        coll = GetComponent<Collider>();
         PlayerPrefs.SetInt(PlayerPrefKeys.Coin, 1000);
     }
 
@@ -22,6 +24,7 @@ public class Door : MonoBehaviour, IInteractable
             var customer = manager.GetCustomer();
             customer.SetToRoom(room);
             room.SetCustomer(customer);
+            manager.SetCustomer(null);
         }
     }
 }

@@ -4,11 +4,7 @@ using UnityEngine;
 
 public class CustomerAnimation : MonoBehaviour
 {
-    private Animator animator;
-    private void Awake()
-    {
-        animator = GetComponentInChildren<Animator>();
-    }
+    [SerializeField] private Animator animator;
     public void SetWalk(bool set)
     {
         animator.SetBool("Walk", set);
