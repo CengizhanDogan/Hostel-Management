@@ -7,11 +7,9 @@ public class Door : MonoBehaviour, IInteractable
 {
     [SerializeField] private Room room;
 
-    public Collider coll;
     private void Start()
     {
         room.door = this;
-        coll = GetComponent<Collider>();
         PlayerPrefs.SetInt(PlayerPrefKeys.Coin, 1000);
     }
 

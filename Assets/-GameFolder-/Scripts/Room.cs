@@ -18,6 +18,9 @@ public class Room : MonoBehaviour, IPurchasable
     [SerializeField] private Rigidbody doorRb;
     [SerializeField] private Transform longWalls;
 
+    [SerializeField] private Transform sitTransform;
+    [SerializeField] private Transform sleepTransform;
+
     public int GetCost(out int cost)
     {
         return cost = roomValue;
@@ -30,7 +33,6 @@ public class Room : MonoBehaviour, IPurchasable
         transform.DOMoveY(0, 1f).SetEase(Ease.OutBack).OnComplete(() =>
         {
             available = true;
-            door.coll.enabled = true;
             doorRb.isKinematic = false;
         });
         longWalls.transform.DOMoveY(-3, 1f).SetEase(Ease.OutBack);
