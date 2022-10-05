@@ -27,11 +27,10 @@ public class DoorMovement : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         if (!canBePushed) return;
-        Debug.Log(collision.gameObject.layer);
+
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player") ||
             collision.gameObject.layer == LayerMask.NameToLayer("Customer"))
         {
-            Debug.Log("Collide");
             countDown = resetTime;
             rb.isKinematic = false;
             DOTween.KillAll(transform);
@@ -44,7 +43,6 @@ public class DoorMovement : MonoBehaviour
     {
         while (countDown > 0)
         {
-            Debug.Log(countDown);
             countDown--;
             yield return null;
         }

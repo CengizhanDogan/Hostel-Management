@@ -12,18 +12,22 @@ public class Room : MonoBehaviour, IPurchasable
     public Door door;
 
     public bool available;
-    public void SetCustomer(CustomerBehaviour customer) { roomCustomer = customer; }
-    public CustomerBehaviour GetCustomer() { return roomCustomer; }
-
     [SerializeField] private Rigidbody doorRb;
     [SerializeField] private Transform longWalls;
 
-    [SerializeField] private Transform sitTransform;
-    [SerializeField] private Transform sleepTransform;
+    public Transform sitTransform;
+    public Transform sleepTransform;
 
-    public int GetCost(out int cost)
+    public void SetCustomer(CustomerBehaviour customer) 
+    { 
+        roomCustomer = customer;
+        door.coll.enabled = !customer;
+    }
+    public CustomerBehaviour GetCustomer() { return roomCustomer; }
+
+    public int GetCost()
     {
-        return cost = roomValue;
+        return roomValue;
     }
 
     public void GetPurchased()

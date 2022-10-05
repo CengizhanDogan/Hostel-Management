@@ -24,8 +24,7 @@ public class ReceptionBehaviour : IState
     {
         if(!reception.customers.Contains(customerBehaviour)) reception.AddCustomer(customerBehaviour);
         customerBehaviour.customerAnimation.SetWalk(true);
-        Debug.Log(reception.customers.IndexOf(customerBehaviour));
-        navMeshAgent.SetDestination(reception.WaitPos(customerBehaviour));
+        navMeshAgent.SetDestination(reception.WaitPos(reception.customers.IndexOf(customerBehaviour)));
         customerBehaviour.getColl.enabled = false;
     }
 

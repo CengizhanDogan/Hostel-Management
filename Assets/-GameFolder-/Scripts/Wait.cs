@@ -26,11 +26,15 @@ public class Wait : IState
 
     public void Tick()
     {
-        customerBehaviour.patiance -= 0.01f;
+        customerBehaviour.patiance -= Time.deltaTime;
         if (reorder)
         {
             reorder = false;
             reception.end = false;
+        }
+        if (customerBehaviour.patiance <= 0)
+        {
+            customerBehaviour.exit = true;
         }
     }
 }

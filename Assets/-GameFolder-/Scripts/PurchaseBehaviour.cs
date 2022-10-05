@@ -19,8 +19,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
     private void Start()
     {
         room = roomObject.GetComponent<IPurchasable>();
-        room.GetCost(out var cost);
-        roomValue = cost;
+        roomValue = room.GetCost();
         textMesh.text = roomValue.ToString();
         var scale = line.localScale + Vector3.one * 0.1f;
         line.DOScale(scale, 0.5f).SetLoops(-1, LoopType.Yoyo);
@@ -42,6 +41,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 
                 var spawnPos = manager.transform.position; spawnPos.y += 1;
                 var cash = PoolingSystem.Instance.InstantiateAPS("Cash", spawnPos);
+                cash.GetComponent<Money>().SetColliders(false);
 
                 cash.transform.DOMove(transform.position, 0.5f)
                     .OnComplete(() => PoolingSystem.Instance.DestroyAPS(cash));

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using DG.Tweening;
 
 public class RoomBehaviour : MonoBehaviour, IState
 {
@@ -13,8 +14,12 @@ public class RoomBehaviour : MonoBehaviour, IState
     private float roomTime;
     private NavMeshAgent navMeshAgent;
 
+    public Sleep sleep;
+
     private bool firstMovement;
     private bool tick;
+    public bool slept;
+    public bool doSleep;
 
     public void SetRoom(Room room) { this.room = room; }
     public void SetRoomTime(float time) { roomTime = time; }
@@ -40,10 +45,14 @@ public class RoomBehaviour : MonoBehaviour, IState
         }
         if (tick)
         {
+            roomTime -= Time.deltaTime;
             stateMachine.Tick();
         }
-
-        
+        if (roomTime <= 0)
+        {
+            customerBehaviour.exit = true;
+            customerBehaviour.giveMoney = true;
+        }
     }
 
     private void SetStateMachine()
@@ -52,14 +61,19 @@ public class RoomBehaviour : MonoBehaviour, IState
 
         stateMachine = new StateMachine();
 
-        var wonderRoom = new WonderRoom(navMeshAgent, room, customerBehaviour);
+        var wonderRoom = new WonderRoom(navMeshAgent, room, customerBehaviour, this);
+        sleep = new Sleep(customerBehaviour, room, navMeshAgent, transform, this);
+
+        At(wonderRoom, sleep, Sleep());
+        At(sleep, wonderRoom, Slept());
 
         stateMachine.SetState(wonderRoom);
 
         //stateMachine.AddAnyTransition(wonderRoom, Wonder());
-        //void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
+        void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
-        //Func<bool> Sleep() => () => !navMeshAgent.hasPath && UnityEngine.Random.value < 0.7f;
+        Func<bool> Sleep() => () => doSleep;
+        Func<bool> Slept() => () => slept;
     }
 }
 
@@ -68,17 +82,20 @@ public class WonderRoom : IState
     private NavMeshAgent navMeshAgent;
     private CustomerBehaviour customerBehaviour;
     private Room room;
+    private RoomBehaviour roomBehaviour;
 
     private float wonderValue;
 
-    public WonderRoom(NavMeshAgent navMeshAgent, Room room, CustomerBehaviour customerBehaviour)
+    public WonderRoom(NavMeshAgent navMeshAgent, Room room, CustomerBehaviour customerBehaviour, RoomBehaviour roomBehaviour)
     {
         this.navMeshAgent = navMeshAgent;
         this.room = room;
         this.customerBehaviour = customerBehaviour;
+        this.roomBehaviour = roomBehaviour;
     }
     public void OnEnter()
     {
+        roomBehaviour.slept = true;
         Wonder();
     }
 
@@ -94,6 +111,11 @@ public class WonderRoom : IState
             customerBehaviour.customerAnimation.SetWalk(false);
             wonderValue = UnityEngine.Random.value;
             if (wonderValue > 0.995f) Wonder();
+            if (wonderValue < 0.0005f)
+            {
+                roomBehaviour.doSleep = true;
+                roomBehaviour.slept = false;
+            }
         }
     }
 
@@ -104,5 +126,77 @@ public class WonderRoom : IState
         randomPos.x += UnityEngine.Random.Range(-2f, 2f);
         randomPos.z += UnityEngine.Random.Range(-2f, 2f);
         navMeshAgent.SetDestination(randomPos);
+    }
+}
+
+public class Sleep : IState
+{
+    private CustomerBehaviour customerBehaviour;
+    private Room room;
+    private NavMeshAgent navMeshAgent;
+    private Transform transform;
+    private RoomBehaviour roomBehaviour;
+    private Vector3 startPos;
+
+    private bool animating;
+    private bool sleep;
+    public bool sat;
+    private float sleptValue;
+
+    public Sleep(CustomerBehaviour customerBehaviour, Room room, NavMeshAgent navMeshAgent, Transform transform, RoomBehaviour roomBehaviour)
+    {
+        this.customerBehaviour = customerBehaviour;
+        this.room = room;
+        this.navMeshAgent = navMeshAgent;
+        this.transform = transform;
+        this.roomBehaviour = roomBehaviour;
+    }
+    public void OnEnter()
+    {
+        navMeshAgent.SetDestination(room.sitTransform.position);
+    }
+
+    public void OnExit()
+    {
+        transform.position = startPos;
+        navMeshAgent.enabled = true;
+        sleep = false;
+        roomBehaviour.slept = true;
+        roomBehaviour.doSleep = false;
+        animating = false;
+        customerBehaviour.customerAnimation.SetSleep(false);
+    }
+
+    public void Tick()
+    {
+        if (!navMeshAgent.hasPath && !animating)
+        {
+            startPos = transform.position;
+            animating = true;
+            navMeshAgent.enabled = false;
+            transform.DORotate(room.sitTransform.eulerAngles, 0.5f);
+            transform.DOMove(room.sitTransform.position, 0.5f).OnComplete(() =>
+            {
+                customerBehaviour.customerAnimation.SetSleep(true);
+            });
+        }
+        if (sat)
+        {
+            sat = false;
+            transform.DORotate(room.sleepTransform.eulerAngles, 0.5f);
+            transform.DOMove(room.sleepTransform.position, 0.5f).OnComplete(() =>
+            {
+                sleep = true;
+            });
+        }
+        sleptValue = UnityEngine.Random.value;
+        if (sleep && sleptValue < 0.0005f)
+        {
+            sleep = false;
+            customerBehaviour.customerAnimation.SetSleep(false);
+            navMeshAgent.enabled = true;
+            roomBehaviour.slept = true;
+            roomBehaviour.doSleep = false;
+        }
     }
 }

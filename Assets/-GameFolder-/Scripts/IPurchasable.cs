@@ -4,6 +4,6 @@ using UnityEngine;
 
 public interface IPurchasable
 {
-    public int GetCost(out int cost);
+    public int GetCost();
     public void GetPurchased();
 }
