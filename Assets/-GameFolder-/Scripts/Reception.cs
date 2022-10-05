@@ -45,7 +45,7 @@ public class Reception : Singleton<Reception>, IPurchasable
 
     public void GetPurchased()
     {
-        transform.DOScale(scale, 0.5f).OnComplete(() =>
+        transform.DOScale(scale, 0.5f).SetEase(Ease.OutBounce).OnComplete(() =>
         {
             available = true;
         });
