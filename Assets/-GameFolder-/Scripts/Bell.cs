@@ -21,6 +21,7 @@ public class Bell : Singleton<Bell>
     }
     public void RingBell()
     {
+        DOTween.Complete(this);
         bellRing.Play();
         float blendValue = 0f;
 
@@ -39,6 +40,7 @@ public class Bell : Singleton<Bell>
 
     public void DestroyBubble()
     {
+        DOTween.Kill(exclamationBubble);
         exclamationBubble.DOScale(Vector3.zero, 0.25f).SetEase(Ease.Linear);
     }
 }

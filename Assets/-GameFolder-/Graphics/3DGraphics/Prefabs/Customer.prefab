@@ -1492,12 +1492,11 @@ MonoBehaviour:
   customerAnimation: {fileID: 0}
   roomBehaviour: {fileID: 0}
   patiance: 50
-  roomTime: 10
+  roomTime: 20
   getColl: {fileID: 7349093536696516772}
   room: {fileID: 0}
   exit: 0
   giveMoney: 0
-  exclamationBubble: {fileID: 8668426923713852386}
 --- !u!114 &3484130266437768494
 MonoBehaviour:
   m_ObjectHideFlags: 0

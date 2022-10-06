@@ -15,11 +15,13 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
     private IPurchasable room;
 
     private int roomValue;
+    private int loopValue;
 
     private void Start()
     {
         room = roomObject.GetComponent<IPurchasable>();
         roomValue = room.GetCost();
+        loopValue = roomValue;
         textMesh.text = roomValue.ToString();
         var scale = line.localScale + Vector3.one * 0.1f;
         line.DOScale(scale, 0.5f).SetLoops(-1, LoopType.Yoyo);
@@ -55,8 +57,9 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
             {
                 room.GetPurchased();
                 Destroy(gameObject);
+                yield break;
             }
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(1f / loopValue);
         }
     }
     public void Exit()

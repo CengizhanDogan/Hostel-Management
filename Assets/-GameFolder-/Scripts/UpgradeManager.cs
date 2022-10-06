@@ -41,6 +41,7 @@ public class UpgradeManager : MonoBehaviour, IPurchasable
     {
         for (int i = 0; i < renderers.Count; i++)
         {
+            if (!renderers[i]) continue;
             if (i == renderers.Count - 1)
             {
                 renderers[i].material = materials[listOrder + 2];

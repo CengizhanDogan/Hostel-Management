@@ -116,7 +116,7 @@ public class WonderRoom : IState
 
             /* Wonder with probability
              * 
-            if (roomBehaviour.roomTime > 0.995f) Wonder();
+            if (wonderValue > 0.995f) Wonder();
             if (wonderValue < 0.0005f)
             {
                 roomBehaviour.doSleep = true;
@@ -205,13 +205,16 @@ public class Sleep : IState
             });
         }
         sleptValue = UnityEngine.Random.value;
-        if (sleep && sleptValue < 0.0005f)
-        {
-            sleep = false;
-            customerBehaviour.customerAnimation.SetSleep(false);
-            navMeshAgent.enabled = true;
-            roomBehaviour.slept = true;
-            roomBehaviour.doSleep = false;
-        }
+
+        // Don't sleep with random value
+
+        //if (sleep && sleptValue < 0.0005f)
+        //{
+        //    sleep = false;
+        //    customerBehaviour.customerAnimation.SetSleep(false);
+        //    navMeshAgent.enabled = true;
+        //    roomBehaviour.slept = true;
+        //    roomBehaviour.doSleep = false;
+        //}
     }
 }
