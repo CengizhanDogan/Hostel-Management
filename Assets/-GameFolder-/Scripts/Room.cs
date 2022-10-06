@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class Room : MonoBehaviour, IPurchasable
 {
@@ -18,11 +19,15 @@ public class Room : MonoBehaviour, IPurchasable
     public Transform sitTransform;
     public Transform sleepTransform;
 
+    [SerializeField] private Cloud cloud;
+
     public void SetCustomer(CustomerBehaviour customer)
     {
+        cloud.SetCloud(customer);
         roomCustomer = customer;
         door.coll.enabled = !customer;
     }
+
     public CustomerBehaviour GetCustomer() { return roomCustomer; }
 
     public int GetCost()
@@ -42,7 +47,7 @@ public class Room : MonoBehaviour, IPurchasable
         });
         foreach (var longWall in longWalls)
         {
-            longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack);
+            longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack).OnComplete(() => Destroy(longWall.gameObject));
         }
     }
 }

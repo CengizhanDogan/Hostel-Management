@@ -11,7 +11,7 @@ public class RoomBehaviour : MonoBehaviour, IState
 
     private CustomerBehaviour customerBehaviour;
     private Room room;
-    private float roomTime;
+    [HideInInspector] public float roomTime;
     private NavMeshAgent navMeshAgent;
 
     public Sleep sleep;
@@ -84,6 +84,8 @@ public class WonderRoom : IState
     private Room room;
     private RoomBehaviour roomBehaviour;
 
+    private float startTime;
+
     private float wonderValue;
 
     public WonderRoom(NavMeshAgent navMeshAgent, Room room, CustomerBehaviour customerBehaviour, RoomBehaviour roomBehaviour)
@@ -95,6 +97,7 @@ public class WonderRoom : IState
     }
     public void OnEnter()
     {
+        startTime = roomBehaviour.roomTime;
         roomBehaviour.slept = true;
         Wonder();
     }
@@ -110,8 +113,20 @@ public class WonderRoom : IState
         {
             customerBehaviour.customerAnimation.SetWalk(false);
             wonderValue = UnityEngine.Random.value;
-            if (wonderValue > 0.995f) Wonder();
+
+            /* Wonder with probability
+             * 
+            if (roomBehaviour.roomTime > 0.995f) Wonder();
             if (wonderValue < 0.0005f)
+            {
+                roomBehaviour.doSleep = true;
+                roomBehaviour.slept = false;
+            }
+
+            */
+
+            if (roomBehaviour.roomTime > startTime / 1.25f) Wonder();
+            else
             {
                 roomBehaviour.doSleep = true;
                 roomBehaviour.slept = false;

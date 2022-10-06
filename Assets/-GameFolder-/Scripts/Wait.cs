@@ -21,7 +21,7 @@ public class Wait : IState
 
     public void OnExit() 
     {
-        
+        Bell.Instance.DestroyBubble();
     }
 
     public void Tick()

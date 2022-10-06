@@ -11,10 +11,14 @@ public class DoorMovement : MonoBehaviour
     private bool canBePushed;
 
     private Rigidbody rb;
+
+    private Vector3 euler;
     void Start()
     {
         countDown = resetTime;
         rb = GetComponent<Rigidbody>();
+        euler = transform.localEulerAngles;
+
     }
 
     private void Update()
@@ -48,6 +52,6 @@ public class DoorMovement : MonoBehaviour
         }
         rb.isKinematic = true;
         countDown = resetTime;
-        transform.DOLocalRotate(Vector3.up * 180, 0.5f).OnComplete(()=> rb.isKinematic = false);
+        transform.DOLocalRotate(euler, 0.5f).OnComplete(()=> rb.isKinematic = false);
     }
 }

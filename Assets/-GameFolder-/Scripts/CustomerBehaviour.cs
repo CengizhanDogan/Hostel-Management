@@ -19,7 +19,6 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable
     [HideInInspector] public bool exit;
     [HideInInspector] public bool giveMoney;
 
-
     private void Awake()
     {
         customerAnimation = GetComponent<CustomerAnimation>();
