@@ -13,13 +13,13 @@ public class Room : MonoBehaviour, IPurchasable
 
     public bool available;
     [SerializeField] private Rigidbody doorRb;
-    [SerializeField] private Transform longWalls;
+    [SerializeField] private List<Transform> longWalls = new List<Transform>();
 
     public Transform sitTransform;
     public Transform sleepTransform;
 
-    public void SetCustomer(CustomerBehaviour customer) 
-    { 
+    public void SetCustomer(CustomerBehaviour customer)
+    {
         roomCustomer = customer;
         door.coll.enabled = !customer;
     }
@@ -40,6 +40,9 @@ public class Room : MonoBehaviour, IPurchasable
             door.coll.enabled = true;
             doorRb.isKinematic = false;
         });
-        longWalls.transform.DOMoveY(-3, 1f).SetEase(Ease.OutBack);
+        foreach (var longWall in longWalls)
+        {
+            longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack);
+        }
     }
 }
