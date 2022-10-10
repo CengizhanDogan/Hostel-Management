@@ -6,6 +6,9 @@ using DG.Tweening;
 public class Door : MonoBehaviour, IInteractable
 {
     [SerializeField] private Room room;
+    [SerializeField] private Transform grayArea;
+
+    private Vector3 scale;
 
     [HideInInspector] public Collider coll;
     private void Start()
@@ -13,6 +16,7 @@ public class Door : MonoBehaviour, IInteractable
         room.door = this;
         coll = GetComponent<Collider>();
         PlayerPrefs.SetInt(PlayerPrefKeys.Coin, 1000);
+        scale = grayArea.localScale;
     }
 
     public void Interact(ManagerBehaviour manager)
@@ -25,6 +29,9 @@ public class Door : MonoBehaviour, IInteractable
             customer.SetToRoom(room);
             room.SetCustomer(customer);
             manager.SetCustomer(null);
+
+            grayArea.DOScale(scale + Vector3.one * 0.1f, 0.5f)
+                .OnComplete(()=> grayArea.DOScale(scale, 0.5f));
         }
     }
 }

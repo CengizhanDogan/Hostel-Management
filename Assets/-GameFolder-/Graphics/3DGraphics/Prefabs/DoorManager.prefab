@@ -192,4 +192,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   room: {fileID: 0}
+  grayArea: {fileID: 3723004691234701174}
   coll: {fileID: 0}

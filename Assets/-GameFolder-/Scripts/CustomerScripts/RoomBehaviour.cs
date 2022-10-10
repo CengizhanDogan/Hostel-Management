@@ -22,7 +22,6 @@ public class RoomBehaviour : MonoBehaviour, IState
     public bool doSleep;
 
     public void SetRoom(Room room) { this.room = room; }
-    public void SetRoomTime(float time) { roomTime = time; }
     public void SetCustomerBehaviour(CustomerBehaviour customerBehaviour) { this.customerBehaviour = customerBehaviour; }
 
     public void OnEnter()
@@ -45,10 +44,10 @@ public class RoomBehaviour : MonoBehaviour, IState
         }
         if (tick)
         {
-            roomTime -= Time.deltaTime;
+            customerBehaviour.roomTime -= Time.deltaTime;
             stateMachine.Tick();
         }
-        if (roomTime <= 0)
+        if (customerBehaviour.roomTime <= 0)
         {
             customerBehaviour.exit = true;
             customerBehaviour.giveMoney = true;
@@ -169,6 +168,7 @@ public class Sleep : IState
     public void OnEnter()
     {
         navMeshAgent.SetDestination(room.sitTransform.position);
+        room.cloud.SetCloud(true);
     }
 
     public void OnExit()

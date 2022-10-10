@@ -26,7 +26,7 @@ public class Reception : Singleton<Reception>, IPurchasable
     }
     public Vector3 WaitPos(int offsetValue)
     { 
-        return waitTransform.position + (Vector3.forward * -1f * offsetValue) + (Vector3.right * 1.8f * offsetValue);
+        return waitTransform.position + (Vector3.right * 2f * offsetValue);
     }
     public Vector3 LookPos(float yPos)
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using System;
 
-public class Room : MonoBehaviour, IPurchasable
+public class Room : MonoBehaviour, IPurchasable, ITimer
 {
     private CustomerBehaviour roomCustomer;
 
@@ -12,6 +12,7 @@ public class Room : MonoBehaviour, IPurchasable
 
     public Door door;
 
+    [SerializeField] private Timer timer;
     public bool available;
     [SerializeField] private Rigidbody doorRb;
     [SerializeField] private List<Transform> longWalls = new List<Transform>();
@@ -19,13 +20,14 @@ public class Room : MonoBehaviour, IPurchasable
     public Transform sitTransform;
     public Transform sleepTransform;
 
-    [SerializeField] private Cloud cloud;
+    public Cloud cloud;
 
     public void SetCustomer(CustomerBehaviour customer)
     {
-        cloud.SetCloud(customer);
         roomCustomer = customer;
         door.coll.enabled = !customer;
+        if (customer) timer.StartTimer();
+        else timer.StopTimer();
     }
 
     public CustomerBehaviour GetCustomer() { return roomCustomer; }
@@ -49,5 +51,17 @@ public class Room : MonoBehaviour, IPurchasable
         {
             longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack).OnComplete(() => Destroy(longWall.gameObject));
         }
+    }
+
+    public float Time()
+    {
+        var time = 0f;
+        if (roomCustomer) time = roomCustomer.roomTime;
+        return time;
+    }
+
+    public Color TargetColor()
+    {
+        return Color.green;
     }
 }

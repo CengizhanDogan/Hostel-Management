@@ -9,14 +9,16 @@ public class CustomerFollow : IState
     private NavMeshAgent navMeshAgent;
     private ManagerBehaviour manager;
     private CustomerBehaviour customerBehaviour;
+    private Timer timer;
 
-    public CustomerFollow(NavMeshAgent navMeshAgent, CustomerBehaviour customerBehaviour)
+    public CustomerFollow(NavMeshAgent navMeshAgent, CustomerBehaviour customerBehaviour, Timer timer)
     {
         this.navMeshAgent = navMeshAgent;
         this.customerBehaviour = customerBehaviour;
+        this.timer = timer;
         manager = ManagerBehaviour.Instance;
     }
-    public void OnEnter() { }
+    public void OnEnter() { timer.StopTimer(); }
 
     public void OnExit() { navMeshAgent.isStopped = false; }
 

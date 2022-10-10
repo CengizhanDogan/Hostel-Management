@@ -6,16 +6,19 @@ public class Wait : IState
 {
     private CustomerBehaviour customerBehaviour;
     private ReceptionBehaviour reception;
+    private Timer timer;
 
     public bool reorder;
-    public Wait(CustomerBehaviour customerBehaviour, ReceptionBehaviour reception)
+    public Wait(CustomerBehaviour customerBehaviour, ReceptionBehaviour reception, Timer timer)
     {
         this.customerBehaviour = customerBehaviour;
         this.reception = reception;
+        this.timer = timer;
     }
 
     public void OnEnter() 
     {
+        timer.StartTimer();
         customerBehaviour.getColl.enabled = true;
     }
 
@@ -34,6 +37,7 @@ public class Wait : IState
         }
         if (customerBehaviour.patiance <= 0)
         {
+            timer.StopTimer();
             customerBehaviour.exit = true;
         }
     }
