@@ -30,6 +30,7 @@ public class ReceptionBehaviour : IState
 
     public void OnExit()
     {
+        customerBehaviour.areaTransform.DOScale(0.5f, 0.6f).SetEase(Ease.OutBack);
         customerBehaviour.customerAnimation.SetWalk(false);
         transform.DOLookAt(reception.LookPos(transform.position.y), 0.5f);
         customerBehaviour.getColl.enabled = true;

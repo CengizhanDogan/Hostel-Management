@@ -12,8 +12,9 @@ public class Money : MonoBehaviour, IInteractable
     {
         rb = GetComponent<Rigidbody>();
     }
-    public void Interact(ManagerBehaviour manager)
+    public void Interact(CustomerGetter manager)
     {
+        if (!manager.isPlayer) return;
         SetColliders(false);
         rb.isKinematic = true;
         StartCoroutine(FollowManager(manager.transform));

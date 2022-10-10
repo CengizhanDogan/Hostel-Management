@@ -4,12 +4,18 @@ using UnityEngine;
 
 public class Interactor : MonoBehaviour
 {
+    private CustomerGetter customerGetter;
+
+    private void Start()
+    {
+        customerGetter = GetComponent<CustomerGetter>();
+    }
     private void OnTriggerEnter(Collider other)
     {
         IInteractable interactable = other.GetComponentInChildren<IInteractable>();
         if(interactable != null)
         {
-            interactable.Interact(ManagerBehaviour.Instance);
+            interactable.Interact(customerGetter);
         }
     }
 
@@ -18,7 +24,7 @@ public class Interactor : MonoBehaviour
         IInteractable interactable = collision.collider.GetComponentInChildren<IInteractable>();
         if (interactable != null)
         {
-            interactable.Interact(ManagerBehaviour.Instance);
+            interactable.Interact(customerGetter);
         }
     }
     private void OnTriggerExit(Collider other)

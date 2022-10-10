@@ -12,6 +12,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
     [HideInInspector] public RoomBehaviour roomBehaviour;
     [HideInInspector] public Room room;
 
+    private CustomerFollow customerFollow;
     private Wait wait;
     public Collider getColl;
 
@@ -25,6 +26,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
     [SerializeField] private Timer timer;
     [SerializeField] private Transform timerTransform;
+    public Transform areaTransform;
 
     private void Awake()
     {
@@ -44,13 +46,13 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
         var receptionBehavior = new ReceptionBehaviour(navMeshAgent, this);
         wait = new Wait(this, receptionBehavior, timer);
-        var customerFolow = new CustomerFollow(navMeshAgent, this, timer);
+        customerFollow = new CustomerFollow(navMeshAgent, this, timer);
         var exitHotel = new ExitHotel(transform.position, navMeshAgent, transform, this);
 
         At(receptionBehavior, wait, ReachedReception());
         At(wait, receptionBehavior, Reorder());
-        At(wait, customerFolow, Getted());
-        At(customerFolow, roomBehaviour, HasRoom());
+        At(wait, customerFollow, Getted());
+        At(customerFollow, roomBehaviour, HasRoom());
 
         stateMachine.AddAnyTransition(exitHotel, ExitHotel());
 
@@ -67,10 +69,11 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
     private void Update() => stateMachine.Tick();
 
-    public void Interact(ManagerBehaviour manager)
+    public void Interact(CustomerGetter manager)
     {
         if (manager.GetCustomer()) return;
 
+        customerFollow.manager = manager;
         interacted = true;
         getColl.enabled = false;
         manager.SetCustomer(this);
@@ -79,6 +82,8 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
         {
             customer.SetReorder();
         }
+        areaTransform.DOScale(0, 0.6f).SetEase(Ease.InBack)
+            .OnComplete(()=> Destroy(areaTransform.gameObject));
     }
 
     public void SetToRoom(Room room)

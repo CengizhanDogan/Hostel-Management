@@ -7,7 +7,7 @@ using UnityEngine.AI;
 public class CustomerFollow : IState
 {
     private NavMeshAgent navMeshAgent;
-    private ManagerBehaviour manager;
+    public CustomerGetter manager;
     private CustomerBehaviour customerBehaviour;
     private Timer timer;
 
@@ -16,7 +16,6 @@ public class CustomerFollow : IState
         this.navMeshAgent = navMeshAgent;
         this.customerBehaviour = customerBehaviour;
         this.timer = timer;
-        manager = ManagerBehaviour.Instance;
     }
     public void OnEnter() { timer.StopTimer(); }
 

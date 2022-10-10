@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ManagerBehaviour : Singleton<ManagerBehaviour>
+public class CustomerGetter : MonoBehaviour
 {
     private CustomerBehaviour customer;
+    public bool isPlayer;
 
     public void SetCustomer(CustomerBehaviour customer)
     {

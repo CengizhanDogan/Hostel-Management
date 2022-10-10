@@ -19,7 +19,7 @@ public class Door : MonoBehaviour, IInteractable
         scale = grayArea.localScale;
     }
 
-    public void Interact(ManagerBehaviour manager)
+    public void Interact(CustomerGetter manager)
     {
         if (room.available)
         {

@@ -26,12 +26,13 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
         var scale = line.localScale + Vector3.one * 0.1f;
         line.DOScale(scale, 0.5f).SetLoops(-1, LoopType.Yoyo);
     }
-    public void Interact(ManagerBehaviour manager)
+    public void Interact(CustomerGetter manager)
     {
+        if (!manager.isPlayer) return;
         exited = false;
         StartCoroutine(SpendMoneyToRoom(manager));
     }
-    private IEnumerator SpendMoneyToRoom(ManagerBehaviour manager)
+    private IEnumerator SpendMoneyToRoom(CustomerGetter manager)
     {
         while (!exited)
         {

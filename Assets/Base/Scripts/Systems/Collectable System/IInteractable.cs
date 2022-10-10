@@ -4,5 +4,5 @@ using UnityEngine;
 
 public interface IInteractable 
 {
-    void Interact(ManagerBehaviour manager);
+    void Interact(CustomerGetter manager);
 }
