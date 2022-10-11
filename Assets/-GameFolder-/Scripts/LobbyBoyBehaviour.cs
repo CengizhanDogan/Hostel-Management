@@ -5,13 +5,14 @@ using UnityEngine;
 using UnityEngine.AI;
 using DG.Tweening;
 
-public class LobbyBoyBehaviour : MonoBehaviour
+public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 {
     private StateMachine stateMachine;
 
     [HideInInspector] public bool get;
     [HideInInspector] public bool wait;
     [HideInInspector] public bool go;
+    private bool purchased;
 
     public Animator anim;
 
@@ -34,7 +35,7 @@ public class LobbyBoyBehaviour : MonoBehaviour
 
         void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
-        Func<bool> DoGet() => () => get;
+        Func<bool> DoGet() => () => get && purchased;
         Func<bool> DoGo() => () => go;
         Func<bool> DoWait() => () => !go || !get;
     }
@@ -47,6 +48,21 @@ public class LobbyBoyBehaviour : MonoBehaviour
         }
     }
     void Update() { stateMachine.Tick(); }
+
+    public int GetCost()
+    {
+        return 100;
+    }
+
+    public void GetPurchased()
+    {
+        transform.DOScale(1, 0.5f).SetEase(Ease.OutBounce)
+            .OnComplete(() => 
+            { 
+                GetComponent<NavMeshAgent>().enabled = true; 
+                purchased = true; 
+            });
+    }
 }
 
 public class GetCustomer : IState
@@ -98,7 +114,7 @@ public class LobbyBoyWait : IState
     public void OnEnter()
     {
         lobbyBoy.anim.SetBool("Walk", true);
-        navMeshAgent.SetDestination(startPos);
+        if(navMeshAgent.enabled)navMeshAgent.SetDestination(startPos);
         if (!doOnce)
         {
             doOnce = true;
@@ -107,7 +123,7 @@ public class LobbyBoyWait : IState
     }
     public void OnExit()
     {
-        turn = false; 
+        turn = false;
         check = false;
         hasRoom = false;
     }
