@@ -18,8 +18,11 @@ public class ChefBehaviour : MonoBehaviour, IPurchasable
 
     public Animator anim;
 
+    private FoodDelivery delivery;
+
     void Awake()
     {
+        delivery = GetComponent<FoodDelivery>();
         var startPos = transform.position;
         var navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -28,10 +31,13 @@ public class ChefBehaviour : MonoBehaviour, IPurchasable
         var waitBehaviour = new ChefWait(this, navMeshAgent, startPos);
         var getFood = new GetFood(this, navMeshAgent);
         var serveFood = new ServeFood(this, navMeshAgent);
+        var takeOutThrash = new TakeOutTrash(this, navMeshAgent);
 
         At(waitBehaviour, getFood, DoGet());
         At(getFood, serveFood, DoGo());
         At(serveFood, waitBehaviour, DoWait());
+        At(serveFood, takeOutThrash, DoTrash());
+        At(takeOutThrash, waitBehaviour, DoWait());
 
         stateMachine.SetState(waitBehaviour);
 
@@ -39,7 +45,8 @@ public class ChefBehaviour : MonoBehaviour, IPurchasable
 
         Func<bool> DoGet() => () => get && purchased;
         Func<bool> DoGo() => () => go;
-        Func<bool> DoWait() => () => !go || !get;
+        Func<bool> DoWait() => () => (!go || !get) && !delivery.GetFood();
+        Func<bool> DoTrash() => () => (!go || !get) && delivery.GetFood();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -159,6 +166,7 @@ public class ServeFood : IState
     private NavMeshAgent navMeshAgent;
 
     private bool check;
+    private FoodOrder foodOrder;
     public ServeFood(ChefBehaviour chef, NavMeshAgent navMeshAgent)
     {
         this.chef = chef;
@@ -166,11 +174,17 @@ public class ServeFood : IState
     }
     public void OnEnter()
     {
+        Check();
+
+    }
+    private void Check()
+    {
         foreach (var room in RoomLister.Instance.rooms)
         {
             if (room.available && room.GetCustomer())
             {
-                if (!room.GetCustomer().GetComponent<FoodOrder>().HasOrder) continue;
+                foodOrder = room.GetCustomer().GetComponent<FoodOrder>();
+                if (!foodOrder.HasOrder) continue;
 
                 navMeshAgent.SetDestination(room.door.transform.position);
                 check = true;
@@ -178,6 +192,9 @@ public class ServeFood : IState
                 return;
             }
         }
+
+        chef.get = false;
+        chef.go = false;
     }
 
     public void OnExit()
@@ -189,11 +206,35 @@ public class ServeFood : IState
     {
         if (check)
         {
-            if (!navMeshAgent.hasPath)
+            if (!navMeshAgent.hasPath || !foodOrder.HasOrder)
             {
                 chef.get = false;
                 chef.go = false;
             }
         }
+    }
+}
+public class TakeOutTrash : IState
+{
+    private ChefBehaviour chef;
+    private NavMeshAgent navMeshAgent;
+
+    public TakeOutTrash(ChefBehaviour chef, NavMeshAgent navMeshAgent)
+    {
+        this.chef = chef;
+        this.navMeshAgent = navMeshAgent;
+    }
+    public void OnEnter()
+    {
+        navMeshAgent.SetDestination(chef.kitchen.trashCan.position);
+    }
+
+    public void OnExit()
+    {
+        chef.anim.SetBool("Tray", false);
+    }
+
+    public void Tick()
+    {
     }
 }

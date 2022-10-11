@@ -19,7 +19,9 @@ public class Fridge : MonoBehaviour, IInteractable
         var delivery = interactor.GetComponent<FoodDelivery>();
         if (delivery.GetFood()) return;
 
-        
+        PlayerAnimatorController anim = null;
+        if (interactor.TryGetComponent(out CustomerGetter cg))
+            anim = interactor.GetComponentInChildren<PlayerAnimatorController>();
 
         var spawnPos = fridge.position; spawnPos.y += 1f;
         var food = Instantiate(this.food, spawnPos, this.food.transform.rotation);
@@ -29,26 +31,21 @@ public class Fridge : MonoBehaviour, IInteractable
             .OnComplete(() =>
             {
                 StartCoroutine(SendFood(food, delivery, interactor));
+                if (anim) anim.SetTrayAnimation(true);
             });
     }
 
     private IEnumerator SendFood(Food food, FoodDelivery delivery, Interactor interactor)
     {
-        while (Vector3.Distance(food.transform.position, delivery.CarryTransform.position) > 0.1f)
+        while (Vector3.Distance(food.transform.position, delivery.CarryTransform.position) > 0.25f)
         {
             food.transform.position =
                 Vector3.Lerp(food.transform.position,
-                delivery.CarryTransform.position, 10 * Time.deltaTime);
+                delivery.CarryTransform.position, 20 * Time.deltaTime);
             yield return null;
         }
 
-        PlayerAnimatorController anim = null;
-        if (interactor.TryGetComponent(out CustomerGetter cg))
-            anim = interactor.GetComponentInChildren<PlayerAnimatorController>();
-
         food.SetFollowTransform(delivery.CarryTransform);
-
-        if (anim) anim.SetTrayAnimation(true);
 
         fridgeDoor.DOLocalRotate(Vector3.zero, 0.5f);
     }

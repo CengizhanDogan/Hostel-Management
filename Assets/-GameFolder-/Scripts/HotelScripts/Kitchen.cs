@@ -11,6 +11,7 @@ public class Kitchen : MonoBehaviour, IPurchasable
     [SerializeField] private Rigidbody doorRb;
     [SerializeField] private List<Transform> longWalls = new List<Transform>();
 
+    public Transform trashCan;
     public List<Fridge> fridges = new List<Fridge>();
 
     public int GetCost()

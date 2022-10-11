@@ -53,6 +53,7 @@ public class Order : MonoBehaviour, IInteractable
                 SetBubbles(false);
                 if (anim) anim.SetTrayAnimation(false);
                 delivery.SetFood(null);
+                Destroy(food.gameObject);
             });
 
             room.GetCustomer().GetComponent<FoodOrder>().OrderDone();
