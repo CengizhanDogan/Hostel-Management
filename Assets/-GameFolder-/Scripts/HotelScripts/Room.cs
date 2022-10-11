@@ -21,7 +21,12 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
     public Transform sleepTransform;
 
     public Cloud cloud;
+    [SerializeField] private Order order;
 
+    private void Start()
+    {
+        order.room = this;
+    }
     public void SetCustomer(CustomerBehaviour customer)
     {
         roomCustomer = customer;
@@ -63,5 +68,11 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
     public Color TargetColor()
     {
         return Color.green;
+    }
+
+    public void SetOrder(bool set)
+    {
+        order.SetBubbles(set);
+        
     }
 }

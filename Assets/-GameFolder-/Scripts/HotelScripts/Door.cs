@@ -19,10 +19,12 @@ public class Door : MonoBehaviour, IInteractable
         scale = grayArea.localScale;
     }
 
-    public void Interact(CustomerGetter manager)
+    public void Interact(Interactor interactor)
     {
         if (room.available)
         {
+            var manager = interactor.GetComponent<CustomerGetter>();
+
             if (manager.GetCustomer() == null || room.GetCustomer() != null) return;
 
             var customer = manager.GetCustomer();

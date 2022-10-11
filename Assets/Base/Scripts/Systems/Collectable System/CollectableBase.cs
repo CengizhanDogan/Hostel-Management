@@ -6,7 +6,7 @@ public class CollectableBase : MonoBehaviour, IInteractable
 {
 	public GameObject CollectEffectPrefab;
 	[SerializeField] private bool uiCollectEffect;
-	public virtual void Interact(CustomerGetter manager)
+	public virtual void Interact(Interactor interactor)
 	{
 		if (CollectEffectPrefab != null)
 		{

@@ -28,7 +28,10 @@ public class PlayerAnimatorController : MonoBehaviour
 		walkSpeed = new Vector3(Rb.velocity.x, 0, rb.velocity.z).magnitude / Walker.movementSpeed;
 		Animator.SetFloat("WalkSpeed", walkSpeed);
 	}
-
+	public void SetTrayAnimation(bool set)
+    {
+		Animator.SetBool("Tray", set);
+	}
 	public void PlayDeathAnimation()
 	{
 		Animator.SetTrigger("Die");

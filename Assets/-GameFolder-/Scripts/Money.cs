@@ -12,8 +12,10 @@ public class Money : MonoBehaviour, IInteractable
     {
         rb = GetComponent<Rigidbody>();
     }
-    public void Interact(CustomerGetter manager)
+    public void Interact(Interactor interactor)
     {
+        var manager = interactor.GetComponent<CustomerGetter>();
+
         if (!manager.isPlayer) return;
         SetColliders(false);
         rb.isKinematic = true;

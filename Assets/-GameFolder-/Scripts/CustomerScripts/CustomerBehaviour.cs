@@ -20,7 +20,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
     public float roomTime;
     private float moneyCount;
 
-    private bool interacted;
+    public bool interacted;
     [HideInInspector] public bool exit;
     [HideInInspector] public bool giveMoney;
 
@@ -69,8 +69,10 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
     private void Update() => stateMachine.Tick();
 
-    public void Interact(CustomerGetter manager)
+    public void Interact(Interactor interactor)
     {
+        var manager = interactor.GetComponent<CustomerGetter>();
+
         if (manager.GetCustomer()) return;
 
         customerFollow.manager = manager;

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using DG.Tweening;
 
-public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
+public class ChefBehaviour : MonoBehaviour, IPurchasable
 {
     private StateMachine stateMachine;
 
@@ -13,6 +13,8 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
     [HideInInspector] public bool wait;
     [HideInInspector] public bool go;
     private bool purchased;
+
+    public Kitchen kitchen;
 
     public Animator anim;
 
@@ -23,14 +25,13 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 
         stateMachine = new StateMachine();
 
-        var waitBehaviour = new LobbyBoyWait(this, navMeshAgent, startPos);
-        var getCustomer = new GetCustomer(this, navMeshAgent);
-        var goToRoom = new GoToRoom(this, navMeshAgent);
+        var waitBehaviour = new ChefWait(this, navMeshAgent, startPos);
+        var getFood = new GetFood(this, navMeshAgent);
+        var serveFood = new ServeFood(this, navMeshAgent);
 
-        At(waitBehaviour, getCustomer, DoGet());
-        At(getCustomer, goToRoom, DoGo());
-        At(goToRoom, waitBehaviour, DoWait());
-        At(getCustomer, waitBehaviour, DontGet());
+        At(waitBehaviour, getFood, DoGet());
+        At(getFood, serveFood, DoGo());
+        At(serveFood, waitBehaviour, DoWait());
 
         stateMachine.SetState(waitBehaviour);
 
@@ -39,12 +40,11 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
         Func<bool> DoGet() => () => get && purchased;
         Func<bool> DoGo() => () => go;
         Func<bool> DoWait() => () => !go || !get;
-        Func<bool> DontGet() => () => !get;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent(out CustomerBehaviour cb))
+        if (other.TryGetComponent(out Fridge fridge))
         {
             go = true;
         }
@@ -58,78 +58,64 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 
     public void GetPurchased()
     {
-        transform.DOScale(1, 0.5f).SetEase(Ease.OutBounce)
-            .OnComplete(() => 
-            { 
-                GetComponent<NavMeshAgent>().enabled = true; 
-                purchased = true; 
+        transform.DOScale(0.5f, 0.5f).SetEase(Ease.OutBounce)
+            .OnComplete(() =>
+            {
+                GetComponent<NavMeshAgent>().enabled = true;
+                purchased = true;
             });
     }
 }
 
-public class GetCustomer : IState
+public class GetFood : IState
 {
-    private LobbyBoyBehaviour lobbyBoy;
+    private ChefBehaviour chef;
     private NavMeshAgent navMeshAgent;
-
-    private CustomerBehaviour customer;
-    public GetCustomer(LobbyBoyBehaviour lobbyBoy, NavMeshAgent navMeshAgent)
+    public GetFood(ChefBehaviour chef, NavMeshAgent navMeshAgent)
     {
-        this.lobbyBoy = lobbyBoy;
+        this.chef = chef;
         this.navMeshAgent = navMeshAgent;
     }
 
     public void OnEnter()
     {
-        lobbyBoy.anim.SetBool("Walk", true);
-        customer = Reception.Instance.customers[0];
-        navMeshAgent.SetDestination(customer.transform.position);
+        chef.anim.SetBool("Walk", true);
+        navMeshAgent.SetDestination(chef.kitchen.fridges
+            [PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel)].transform.position);
     }
 
     public void OnExit()
     {
+
     }
 
     public void Tick()
     {
-        if (customer.interacted)
-        {
-            if(Reception.Instance.customers.Count > 0)
-            {
-                customer = Reception.Instance.customers[0];
-                navMeshAgent.SetDestination(customer.transform.position);
-            }
-            else
-            {
-                lobbyBoy.get = false;
-            }
-        }
+
     }
 }
-public class LobbyBoyWait : IState
+public class ChefWait : IState
 {
-    private LobbyBoyBehaviour lobbyBoy;
+    private ChefBehaviour chef;
     private NavMeshAgent navMeshAgent;
 
-    private bool hasRoom;
     private bool turn;
     private bool check;
     private bool doOnce;
 
-
     private Vector3 startPos;
 
-    public LobbyBoyWait(LobbyBoyBehaviour lobbyBoy, NavMeshAgent navMeshAgent, Vector3 startPos)
+    public ChefWait(ChefBehaviour chef, NavMeshAgent navMeshAgent, Vector3 startPos)
     {
-        this.lobbyBoy = lobbyBoy;
+        this.chef = chef;
         this.navMeshAgent = navMeshAgent;
         this.startPos = startPos;
     }
 
     public void OnEnter()
     {
-        lobbyBoy.anim.SetBool("Walk", true);
-        if(navMeshAgent.enabled)navMeshAgent.SetDestination(startPos);
+        chef.anim.SetBool("Walk", true);
+        if (navMeshAgent.enabled) navMeshAgent.SetDestination(startPos);
         if (!doOnce)
         {
             doOnce = true;
@@ -140,7 +126,6 @@ public class LobbyBoyWait : IState
     {
         turn = false;
         check = false;
-        hasRoom = false;
     }
 
     public void Tick()
@@ -153,44 +138,43 @@ public class LobbyBoyWait : IState
         if (!navMeshAgent.hasPath && turn)
         {
             turn = false;
-            lobbyBoy.anim.SetBool("Walk", false);
-            lobbyBoy.transform.DORotate(Vector3.up * 180, 0.5f);
+            chef.anim.SetBool("Walk", false);
+            chef.transform.DORotate(Vector3.up * 180, 0.5f);
         }
         foreach (var room in RoomLister.Instance.rooms)
         {
-            if (room.available && !room.GetCustomer())
+            if (room.available && room.GetCustomer())
             {
-                hasRoom = true;
+                if (!room.GetCustomer().GetComponent<FoodOrder>().HasOrder) continue;
+                chef.get = true;
+                return;
             }
-        }
-        if (hasRoom && Reception.Instance.customers.Count > 0)
-        {
-            if (Reception.Instance.customers[0].getColl.enabled)
-                lobbyBoy.get = true;
         }
     }
 }
 
-public class GoToRoom : IState
+public class ServeFood : IState
 {
-    private LobbyBoyBehaviour lobbyBoy;
+    private ChefBehaviour chef;
     private NavMeshAgent navMeshAgent;
 
     private bool check;
-    public GoToRoom(LobbyBoyBehaviour lobbyBoy, NavMeshAgent navMeshAgent)
+    public ServeFood(ChefBehaviour chef, NavMeshAgent navMeshAgent)
     {
-        this.lobbyBoy = lobbyBoy;
+        this.chef = chef;
         this.navMeshAgent = navMeshAgent;
     }
     public void OnEnter()
     {
         foreach (var room in RoomLister.Instance.rooms)
         {
-            if (room.available && !room.GetCustomer())
+            if (room.available && room.GetCustomer())
             {
+                if (!room.GetCustomer().GetComponent<FoodOrder>().HasOrder) continue;
+
                 navMeshAgent.SetDestination(room.door.transform.position);
                 check = true;
-                lobbyBoy.anim.SetBool("Walk", true);
+                chef.anim.SetBool("Tray", true);
                 return;
             }
         }
@@ -198,6 +182,7 @@ public class GoToRoom : IState
 
     public void OnExit()
     {
+        chef.anim.SetBool("Tray", false);
     }
 
     public void Tick()
@@ -206,8 +191,8 @@ public class GoToRoom : IState
         {
             if (!navMeshAgent.hasPath)
             {
-                lobbyBoy.get = false;
-                lobbyBoy.go = false;
+                chef.get = false;
+                chef.go = false;
             }
         }
     }
