@@ -21,8 +21,8 @@ public class Collidor : MonoBehaviour, IPurchasable
         enabler.SetActive(true);
         transform.DOScaleZ(1, 0.75f).SetEase(Ease.OutBounce).OnComplete(() =>
         {
-            foreach (Transform t in longWalls) { t.DOMoveY(-4f, 0.5f); }
             door.SetActive(true);
         });
+        foreach (Transform t in longWalls) { t.DOMoveY(-4f, 0.5f); }
     }
 }

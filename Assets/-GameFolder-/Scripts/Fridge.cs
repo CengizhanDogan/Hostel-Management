@@ -6,7 +6,7 @@ using DG.Tweening;
 public class Fridge : MonoBehaviour, IInteractable
 {
     [SerializeField] private Transform fridge;
-    [SerializeField] private Transform fridgeDoor;
+    [SerializeField] private List<Transform> fridgeDoor = new List<Transform>();
     [SerializeField] private Food food;
     private Collider coll;
 
@@ -27,12 +27,21 @@ public class Fridge : MonoBehaviour, IInteractable
         var food = Instantiate(this.food, spawnPos, this.food.transform.rotation);
         delivery.SetFood(food);
 
-        fridgeDoor.DOLocalRotate(Vector3.up * 120, 0.5f)
+        fridgeDoor[0].DOLocalRotate(Vector3.up * 120, 0.5f)
             .OnComplete(() =>
             {
                 StartCoroutine(SendFood(food, delivery, interactor));
                 if (anim) anim.SetTrayAnimation(true);
             });
+        if (fridgeDoor.Count > 1)
+        {
+            fridgeDoor[1].DOLocalRotate(Vector3.up * -120, 0.5f)
+                .OnComplete(() =>
+                {
+                    StartCoroutine(SendFood(food, delivery, interactor));
+                    if (anim) anim.SetTrayAnimation(true);
+                });
+        }
     }
 
     private IEnumerator SendFood(Food food, FoodDelivery delivery, Interactor interactor)
@@ -47,7 +56,10 @@ public class Fridge : MonoBehaviour, IInteractable
 
         food.SetFollowTransform(delivery.CarryTransform);
 
-        fridgeDoor.DOLocalRotate(Vector3.zero, 0.5f);
+        foreach (var item in fridgeDoor)
+        {
+            item.DOLocalRotate(Vector3.zero, 0.5f);
+        }
     }
 
     public void SetColl(bool set)

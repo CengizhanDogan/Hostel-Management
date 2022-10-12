@@ -60,7 +60,7 @@ public class ChefBehaviour : MonoBehaviour, IPurchasable
 
     public int GetCost()
     {
-        return 100;
+        return 500;
     }
 
     public void GetPurchased()
@@ -179,6 +179,8 @@ public class ServeFood : IState
     }
     private void Check()
     {
+        var closest = 99f;
+        Room target = null;
         foreach (var room in RoomLister.Instance.rooms)
         {
             if (room.available && room.GetCustomer())
@@ -186,12 +188,21 @@ public class ServeFood : IState
                 foodOrder = room.GetCustomer().GetComponent<FoodOrder>();
                 if (!foodOrder.HasOrder) continue;
 
-                navMeshAgent.SetDestination(room.door.transform.position);
-                check = true;
-                chef.anim.SetBool("Tray", true);
-                return;
+                var distance = Vector3.Distance(chef.transform.position,
+                    room.door.transform.position);
+                if (distance < closest)
+                {
+                    target = room;
+                    closest = distance;
+                }
             }
         }
+
+        navMeshAgent.SetDestination(target.door.transform.position);
+        check = true;
+        chef.anim.SetBool("Tray", true);
+
+        if (target) return;
 
         chef.get = false;
         chef.go = false;

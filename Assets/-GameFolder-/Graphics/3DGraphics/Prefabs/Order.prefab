@@ -339,8 +339,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   orderBubbles:
   - {fileID: 6052650687584718917}
-  - {fileID: 7994595066550156915}
   - {fileID: 4403486950395583779}
+  - {fileID: 7994595066550156915}
   room: {fileID: 0}
 --- !u!1 &7994595066550156915
 GameObject:

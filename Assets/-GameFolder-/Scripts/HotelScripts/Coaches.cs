@@ -15,7 +15,7 @@ public class Coaches : MonoBehaviour, IPurchasable
     }
     public int GetCost()
     {
-        return 50;
+        return 250;
     }
 
     public void GetPurchased()

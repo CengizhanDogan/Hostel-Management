@@ -22,15 +22,15 @@ public class Kitchen : Singleton<Kitchen>, IPurchasable
     public void GetPurchased()
     {
         doorRb.isKinematic = false;
+        available = true;
 
         transform.DOMoveY(0, 1f).SetEase(Ease.OutBack).OnComplete(() =>
         {
-            available = true;
             doorRb.isKinematic = false;
         });
         foreach (var longWall in longWalls)
         {
-            longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack).OnComplete(()=> Destroy(longWall.gameObject));
+            longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack).OnComplete(() => Destroy(longWall.gameObject));
         }
     }
 }

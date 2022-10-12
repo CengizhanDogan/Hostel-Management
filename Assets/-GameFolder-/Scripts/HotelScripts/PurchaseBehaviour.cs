@@ -7,24 +7,67 @@ using DG.Tweening;
 public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 {
     private bool exited;
+    [SerializeField] private bool isUpgrade;
+    private bool activated;
 
     [SerializeField] private TextMeshProUGUI textMesh;
     [SerializeField] private Transform line;
-    [SerializeField] private GameObject roomObject;
+    [SerializeField] private GameObject purchaseObject;
 
-    private IPurchasable room;
+    private PurchaseManager purchaseManager;
+
+    private IPurchasable purchasable;
 
     private int roomValue;
     private int loopValue;
 
+    private Vector3 scale;
+
+    [SerializeField] private int enableOrder;
+
+    private void OnEnable()
+    {
+        EventManager.OnPurchaseEvent.AddListener(CheckEnable);
+    }
+    private void OnDisable()
+    {
+        EventManager.OnPurchaseEvent.RemoveListener(CheckEnable);
+    }
+
     private void Start()
     {
-        room = roomObject.GetComponent<IPurchasable>();
-        roomValue = room.GetCost();
+        purchaseManager = PurchaseManager.Instance;
+        if (enableOrder != 0) Disable();
+        else activated = true;
+
+        purchasable = purchaseObject.GetComponent<IPurchasable>();
+        purchaseManager.AddPurchasable(purchasable);
+        roomValue = purchasable.GetCost();
         loopValue = roomValue;
         textMesh.text = roomValue.ToString();
         var scale = line.localScale + Vector3.one * 0.1f;
         line.DOScale(scale, 0.5f).SetLoops(-1, LoopType.Yoyo);
+    }
+    private void Disable()
+    {
+        scale = transform.localScale;
+
+        transform.localScale = Vector3.zero;
+    }
+    private void CheckEnable(int order)
+    {
+        if (enableOrder == 0) activated = true;
+        if (enableOrder <= order && !activated)
+        {
+            if (enableOrder == 9)
+                if (!purchaseObject.
+                    GetComponent<ChefBehaviour>()
+                    .kitchen.available) return;
+
+            activated = true;
+            transform.DOScale(scale, 0.5f).SetEase(Ease.OutBack);
+            EventManager.OnTutorialEvent.Invoke(transform);
+        }
     }
     public void Interact(Interactor interactor)
     {
@@ -34,6 +77,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
         exited = false;
         StartCoroutine(SpendMoneyToRoom(manager));
     }
+
     private IEnumerator SpendMoneyToRoom(CustomerGetter manager)
     {
         while (!exited)
@@ -58,8 +102,10 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
             }
             if (roomValue <= 0)
             {
-                room.GetPurchased();
-                Destroy(gameObject);
+                purchasable.GetPurchased();
+                if (!isUpgrade) purchaseManager.IncreaseOrder();
+                //Destroy(gameObject);
+                gameObject.SetActive(false);
                 yield break;
             }
             yield return new WaitForSeconds(1f / loopValue);

@@ -199,7 +199,11 @@ public class ExitHotel : IState
 
     public void OnEnter()
     {
-        if (customerBehaviour.room) customerBehaviour.room.SetCustomer(null);
+        if (customerBehaviour.room)
+        {
+            customerBehaviour.room.SetCustomer(null);
+            customerBehaviour.room.SetOrder(false);
+        }
         customerBehaviour.roomBehaviour.doSleep = false;
         navMeshAgent.enabled = true;
         customerBehaviour.customerAnimation.SetSleep(false);

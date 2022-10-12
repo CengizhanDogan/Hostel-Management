@@ -11,9 +11,11 @@ public class Bell : Singleton<Bell>
     [SerializeField] private Transform exclamationBubble;
 
     private Vector3 bubbleScale;
+    Vector3 scale;
 
     private void Start()
     {
+        scale = transform.localScale;
         bellRing = GetComponent<AudioSource>();
         rend = GetComponent<SkinnedMeshRenderer>();
         bubbleScale = exclamationBubble.localScale;
@@ -21,11 +23,9 @@ public class Bell : Singleton<Bell>
     }
     public void RingBell()
     {
-        DOTween.Complete(this);
+        DOTween.CompleteAll(this);
         bellRing.Play();
         float blendValue = 0f;
-
-        var scale = transform.localScale;
 
         exclamationBubble.DOScale(bubbleScale, 0.5f).SetEase(Ease.OutBounce);
 

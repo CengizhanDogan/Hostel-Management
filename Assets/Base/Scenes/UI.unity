@@ -380,6 +380,29 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: afffa974d147a914cbb243ee14367ca7, type: 3}
+--- !u!1 &740903309 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5265686236369322220, guid: afffa974d147a914cbb243ee14367ca7, type: 3}
+  m_PrefabInstance: {fileID: 740903308}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &740903310
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 740903309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0f1d17c80e5a6a4b8615fc56b1f15ba, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  joystick: {fileID: 740903311}
+--- !u!1 &740903311 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8170153792237477727, guid: afffa974d147a914cbb243ee14367ca7, type: 3}
+  m_PrefabInstance: {fileID: 740903308}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1522258007
 GameObject:
   m_ObjectHideFlags: 0

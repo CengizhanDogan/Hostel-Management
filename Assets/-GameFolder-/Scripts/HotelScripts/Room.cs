@@ -73,6 +73,5 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
     public void SetOrder(bool set)
     {
         order.SetBubbles(set);
-        
     }
 }

@@ -9,6 +9,7 @@ public class Wait : IState
     private Timer timer;
 
     public bool reorder;
+    private bool timerStarted; 
     public Wait(CustomerBehaviour customerBehaviour, ReceptionBehaviour reception, Timer timer)
     {
         this.customerBehaviour = customerBehaviour;
@@ -18,7 +19,11 @@ public class Wait : IState
 
     public void OnEnter() 
     {
-        timer.StartTimer();
+        if (!timerStarted)
+        {
+            timer.StartTimer();
+            timerStarted = true;
+        }
         customerBehaviour.getColl.enabled = true;
     }
 

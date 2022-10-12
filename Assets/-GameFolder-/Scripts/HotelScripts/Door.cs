@@ -15,7 +15,6 @@ public class Door : MonoBehaviour, IInteractable
     {
         room.door = this;
         coll = GetComponent<Collider>();
-        PlayerPrefs.SetInt(PlayerPrefKeys.Coin, 1000);
         scale = grayArea.localScale;
     }
 

@@ -440,6 +440,12 @@ MonoBehaviour:
     AllowGrow: 1
     AutoDestroy: 1
     clones: []
+  - ID: Cam
+    SourcePrefab: {fileID: 6848521288786464761, guid: 696e1de0ab813b5479ddebe9a98b756f, type: 3}
+    MinNumberOfObject: 10
+    AllowGrow: 1
+    AutoDestroy: 1
+    clones: []
   DefaultCount: 10
   initScale: {x: 0, y: 0, z: 0}
 --- !u!4 &927137609

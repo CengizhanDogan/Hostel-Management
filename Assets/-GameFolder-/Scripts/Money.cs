@@ -8,6 +8,8 @@ public class Money : MonoBehaviour, IInteractable
     [SerializeField] private Collider coll;
     [SerializeField] private Collider trigger;
     private Rigidbody rb;
+
+    [SerializeField] private bool isPlaced;
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -16,6 +18,7 @@ public class Money : MonoBehaviour, IInteractable
     {
         if (interactor.TryGetComponent(out CustomerGetter manager))
         {
+            transform.DOKill();
             if (!manager.isPlayer) return;
             SetColliders(false);
             rb.isKinematic = true;
@@ -33,7 +36,8 @@ public class Money : MonoBehaviour, IInteractable
             yield return null;
         }
         EventManager.OnGemCollected.Invoke(transform.position, () => { });
-        PoolingSystem.Instance.DestroyAPS(gameObject);
+        if (isPlaced) Destroy(gameObject);
+        else PoolingSystem.Instance.DestroyAPS(gameObject);
     }
     public void SetColliders(bool set)
     {

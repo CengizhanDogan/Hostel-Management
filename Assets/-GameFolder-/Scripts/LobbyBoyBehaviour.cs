@@ -53,7 +53,7 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 
     public int GetCost()
     {
-        return 100;
+        return 300;
     }
 
     public void GetPurchased()
@@ -184,16 +184,27 @@ public class GoToRoom : IState
     }
     public void OnEnter()
     {
+        var closest = 99f;
+        Room target = null;
         foreach (var room in RoomLister.Instance.rooms)
         {
             if (room.available && !room.GetCustomer())
             {
-                navMeshAgent.SetDestination(room.door.transform.position);
-                check = true;
-                lobbyBoy.anim.SetBool("Walk", true);
-                return;
+                var distance = Vector3.Distance(lobbyBoy.transform.position,
+                    room.door.transform.position);
+                if (distance < closest)
+                {
+                    target = room;
+                    closest = distance;
+                }
             }
         }
+
+        if (target == null) return;
+
+        navMeshAgent.SetDestination(target.door.transform.position);
+        check = true;
+        lobbyBoy.anim.SetBool("Walk", true);
     }
 
     public void OnExit()

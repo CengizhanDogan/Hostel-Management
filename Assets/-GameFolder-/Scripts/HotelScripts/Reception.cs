@@ -40,7 +40,7 @@ public class Reception : Singleton<Reception>, IPurchasable
 
     public int GetCost()
     {
-        return 20;
+        return 30;
     }
 
     public void GetPurchased()
