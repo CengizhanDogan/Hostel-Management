@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Kitchen : MonoBehaviour, IPurchasable
+public class Kitchen : Singleton<Kitchen>, IPurchasable
 {
     [SerializeField] private int cost;
 

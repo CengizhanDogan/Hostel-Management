@@ -13,7 +13,9 @@ public class FoodOrder : MonoBehaviour
         get
         {
             return customer.roomTime < roomTime
-                && customer.roomTime > roomTime / 3 && Random.value > 0.05f;
+                && customer.roomTime > roomTime / 3 
+                && Random.value > 0.05f
+                && Kitchen.Instance.available;
         }
     }
     private bool doOnce;

@@ -23,17 +23,18 @@ public class Door : MonoBehaviour, IInteractable
     {
         if (room.available)
         {
-            var manager = interactor.GetComponent<CustomerGetter>();
+            if (interactor.TryGetComponent(out CustomerGetter manager))
+            {
+                if (manager.GetCustomer() == null || room.GetCustomer() != null) return;
 
-            if (manager.GetCustomer() == null || room.GetCustomer() != null) return;
+                var customer = manager.GetCustomer();
+                customer.SetToRoom(room);
+                room.SetCustomer(customer);
+                manager.SetCustomer(null);
 
-            var customer = manager.GetCustomer();
-            customer.SetToRoom(room);
-            room.SetCustomer(customer);
-            manager.SetCustomer(null);
-
-            grayArea.DOScale(scale + Vector3.one * 0.1f, 0.5f)
-                .OnComplete(()=> grayArea.DOScale(scale, 0.5f));
+                grayArea.DOScale(scale + Vector3.one * 0.1f, 0.5f)
+                    .OnComplete(() => grayArea.DOScale(scale, 0.5f));
+            }
         }
     }
 }

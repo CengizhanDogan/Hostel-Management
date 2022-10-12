@@ -41,6 +41,7 @@ public class Order : MonoBehaviour, IInteractable
     {
         if (interactor.TryGetComponent(out FoodDelivery delivery))
         {
+            DOTween.Complete(this);
             Food food = delivery.GetFood();
             if (!food) return;
 
@@ -48,9 +49,10 @@ public class Order : MonoBehaviour, IInteractable
             if (interactor.TryGetComponent(out CustomerGetter cg))
                 anim = interactor.GetComponentInChildren<PlayerAnimatorController>();
 
+            SetBubbles(false);
+
             food.transform.DOScale(0, 0.5f).OnComplete(() =>
             {
-                SetBubbles(false);
                 if (anim) anim.SetTrayAnimation(false);
                 delivery.SetFood(null);
                 Destroy(food.gameObject);

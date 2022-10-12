@@ -14,12 +14,13 @@ public class Money : MonoBehaviour, IInteractable
     }
     public void Interact(Interactor interactor)
     {
-        var manager = interactor.GetComponent<CustomerGetter>();
-
-        if (!manager.isPlayer) return;
-        SetColliders(false);
-        rb.isKinematic = true;
-        StartCoroutine(FollowManager(manager.transform));
+        if (interactor.TryGetComponent(out CustomerGetter manager))
+        {
+            if (!manager.isPlayer) return;
+            SetColliders(false);
+            rb.isKinematic = true;
+            StartCoroutine(FollowManager(manager.transform));
+        }
     }
 
     private IEnumerator FollowManager(Transform manager)
