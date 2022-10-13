@@ -6,11 +6,9 @@ public class CustomerSpawner : MonoBehaviour
 {
     [SerializeField] private CustomerBehaviour customer;
     [SerializeField] private float spawnFrequency;
-    private WaitForSeconds wait;
     void Start()
     {
         StartCoroutine(Spawn());
-        wait = new WaitForSeconds(spawnFrequency);
     }
 
     IEnumerator Spawn()
@@ -19,8 +17,9 @@ public class CustomerSpawner : MonoBehaviour
         {
             while (Reception.Instance.available)
             {
+                int starValue = 3 * (PlayerPrefs.GetInt(PlayerPrefKeys.HotelStarLevel) / 20);
                 var customerClone = Instantiate(customer, transform.position, customer.gameObject.transform.rotation);
-                yield return wait;
+                yield return new WaitForSeconds(spawnFrequency - starValue);
             }
             yield return null;
         }

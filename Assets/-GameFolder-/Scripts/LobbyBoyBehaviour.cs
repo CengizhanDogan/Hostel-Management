@@ -59,10 +59,10 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
     public void GetPurchased()
     {
         transform.DOScale(1, 0.5f).SetEase(Ease.OutBounce)
-            .OnComplete(() => 
-            { 
-                GetComponent<NavMeshAgent>().enabled = true; 
-                purchased = true; 
+            .OnComplete(() =>
+            {
+                GetComponent<NavMeshAgent>().enabled = true;
+                purchased = true;
             });
     }
 }
@@ -81,9 +81,16 @@ public class GetCustomer : IState
 
     public void OnEnter()
     {
-        lobbyBoy.anim.SetBool("Walk", true);
-        customer = Reception.Instance.customers[0];
-        navMeshAgent.SetDestination(customer.transform.position);
+        if (Reception.Instance.customers.Count > 0)
+        {
+            customer = Reception.Instance.customers[0];
+            navMeshAgent.SetDestination(customer.transform.position);
+            lobbyBoy.anim.SetBool("Walk", true);
+        }
+        else
+        {
+            lobbyBoy.get = false;
+        }
     }
 
     public void OnExit()
@@ -92,9 +99,14 @@ public class GetCustomer : IState
 
     public void Tick()
     {
+        if (!customer)
+        {
+            lobbyBoy.get = false;
+            return;
+        }
         if (customer.interacted)
         {
-            if(Reception.Instance.customers.Count > 0)
+            if (Reception.Instance.customers.Count > 0)
             {
                 customer = Reception.Instance.customers[0];
                 navMeshAgent.SetDestination(customer.transform.position);
@@ -128,8 +140,9 @@ public class LobbyBoyWait : IState
 
     public void OnEnter()
     {
-        lobbyBoy.anim.SetBool("Walk", true);
-        if(navMeshAgent.enabled)navMeshAgent.SetDestination(startPos);
+        if(Vector3.Distance(lobbyBoy.transform.position, startPos) > 0.1f)
+            lobbyBoy.anim.SetBool("Walk", true);
+        if (navMeshAgent.enabled) navMeshAgent.SetDestination(startPos);
         if (!doOnce)
         {
             doOnce = true;

@@ -150,6 +150,7 @@ public class ExitHotel : IState
 
     public void Tick()
     {
+        var starValue = PlayerPrefs.GetInt(PlayerPrefKeys.HotelStarLevel);
         if (customerBehaviour.giveMoney)
         {
             customerBehaviour.room.cloud.SetCloud(false);
@@ -169,20 +170,32 @@ public class ExitHotel : IState
             {
                 giveMoney = false;
                 customerBehaviour.SpawnMoney();
-                navMeshAgent.SetDestination(pos);
-                return;
+
+                if(starValue < 100)
+                PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
+                    starValue + 4);
+                else PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
+                    100);
             }
         if (canExit && !navMeshAgent.hasPath)
         {
-            navMeshAgent.SetDestination(pos);
+            navMeshAgent.SetDestination(pos); 
             if (Reception.Instance.customers.Contains(customerBehaviour))
             {
+                if (starValue > 4)
+                PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
+                        starValue - 4);
+                else if (starValue < 0)
+                    PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
+                        0);
+
                 Reception.Instance.RemoveCustomer(customerBehaviour);
                 foreach (var customer in Reception.Instance.customers)
                 {
                     customer.SetReorder();
                 }
             }
+            EventManager.OnCustomerLeave.Invoke();
             canExit = false;
             return;
         }
