@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IPurchasable
 {
-    public int GetCost();
+    public int GetCost(PurchaseBehaviour pb);
     public void GetPurchased();
+    public bool IsPurchased();
+    public void SetBool(bool set);
 }

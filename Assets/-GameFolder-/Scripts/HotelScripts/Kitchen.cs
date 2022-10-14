@@ -14,8 +14,19 @@ public class Kitchen : Singleton<Kitchen>, IPurchasable
     public Transform trashCan;
     public List<Fridge> fridges = new List<Fridge>();
 
-    public int GetCost()
+    private PurchaseBehaviour purchaseBehaviour;
+
+    private void Start()
     {
+        if (available)
+        {
+            purchaseBehaviour.Loaded();
+            GetPurchased();
+        }
+    }
+    public int GetCost(PurchaseBehaviour pb)
+    {
+        purchaseBehaviour = pb;
         return cost;
     }
 
@@ -32,5 +43,15 @@ public class Kitchen : Singleton<Kitchen>, IPurchasable
         {
             longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack).OnComplete(() => Destroy(longWall.gameObject));
         }
+    }
+
+    public bool IsPurchased()
+    {
+        return available;
+    }
+
+    public void SetBool(bool set)
+    {
+        available = set;
     }
 }

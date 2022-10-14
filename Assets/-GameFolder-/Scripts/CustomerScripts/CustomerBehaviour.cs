@@ -25,7 +25,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
     [HideInInspector] public bool giveMoney;
 
     [SerializeField] private Timer timer;
-    [SerializeField] private Transform timerTransform;
+    public Transform timerTransform;
     public Transform areaTransform;
 
     private void Awake()
@@ -115,7 +115,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
             var cash = PoolingSystem.Instance.InstantiateAPS("Cash", spawnPos);
             cash.GetComponent<Money>().SetColliders(true);
 
-            cash.transform.DOJump(spawnPos, 2.5f, 1, 1f);
+            cash.transform.DOJump(spawnPos, 2.5f, 1, 1f).SetId("Jump");
         }
     }
 
@@ -139,6 +139,8 @@ public class ExitHotel : IState
     private bool canExit;
     private bool giveMoney;
     private bool exited;
+
+    private GameObject particle;
     public ExitHotel(Vector3 pos, NavMeshAgent navMeshAgent, Transform transform,
         CustomerBehaviour customerBehaviour)
     {
@@ -173,21 +175,29 @@ public class ExitHotel : IState
 
                 if(starValue < 100)
                 PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
-                    starValue + 4);
+                    starValue + 5);
                 else PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
                     100);
+
+                particle = PoolingSystem.Instance.InstantiateAPS("Happy", customerBehaviour.timerTransform.position);
+
+                particle.transform.SetParent(customerBehaviour.transform);
             }
         if (canExit && !navMeshAgent.hasPath)
         {
             navMeshAgent.SetDestination(pos); 
             if (Reception.Instance.customers.Contains(customerBehaviour))
             {
-                if (starValue > 4)
+                if (starValue > 5)
                 PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
-                        starValue - 4);
+                        starValue - 5);
                 else if (starValue < 0)
                     PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
                         0);
+
+                particle = PoolingSystem.Instance.InstantiateAPS("Angry", customerBehaviour.timerTransform.position);
+
+                particle.transform.SetParent(customerBehaviour.transform);
 
                 Reception.Instance.RemoveCustomer(customerBehaviour);
                 foreach (var customer in Reception.Instance.customers)
@@ -202,7 +212,9 @@ public class ExitHotel : IState
         if (!exited && Vector3.Distance(transform.position, pos) < 0.5f)
         {
             exited = true;
-            
+
+            PoolingSystem.Instance.DestroyAPS(particle);
+
             transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
             {
                 customerBehaviour.DestroyCustomer();

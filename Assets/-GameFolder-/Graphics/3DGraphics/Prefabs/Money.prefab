@@ -100,6 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   coll: {fileID: -3562163584248202047}
   trigger: {fileID: -9007810436097239878}
+  isPlaced: 0
 --- !u!65 &-3562163584248202047
 BoxCollider:
   m_ObjectHideFlags: 0

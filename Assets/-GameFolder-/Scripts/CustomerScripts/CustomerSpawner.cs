@@ -13,11 +13,13 @@ public class CustomerSpawner : MonoBehaviour
 
     IEnumerator Spawn()
     {
+        var reception = Reception.Instance;
         while (true)
         {
-            while (Reception.Instance.available)
+            while (reception.available && reception.customers.Count < 8)
             {
-                int starValue = 3 * (PlayerPrefs.GetInt(PlayerPrefKeys.HotelStarLevel) / 20);
+                int starValue = 5 * (PlayerPrefs.GetInt(PlayerPrefKeys.HotelStarLevel) / 20);
+                if (starValue >= 15) starValue = 14;
                 var customerClone = Instantiate(customer, transform.position, customer.gameObject.transform.rotation);
                 yield return new WaitForSeconds(spawnFrequency - starValue);
             }

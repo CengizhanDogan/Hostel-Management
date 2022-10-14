@@ -123,6 +123,49 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &252236228
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 252236230}
+  - component: {fileID: 252236229}
+  m_Layer: 0
+  m_Name: SaveManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &252236229
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252236228}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5b3cf87c22216644ea83a42aea423673, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &252236230
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 252236228}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -8.80102, y: -3.4276428, z: -5.690935}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &573198582
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -132,7 +175,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6801839476148747452, guid: 610fc6bda2c4afc40b05c08775626d41, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 6801839476148747452, guid: 610fc6bda2c4afc40b05c08775626d41, type: 3}
       propertyPath: m_LocalPosition.x
@@ -253,7 +296,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &915329989
 GameObject:
@@ -316,7 +359,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 915329989}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &915329994
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -446,6 +489,42 @@ MonoBehaviour:
     AllowGrow: 1
     AutoDestroy: 1
     clones: []
+  - ID: Angry
+    SourcePrefab: {fileID: 180600, guid: f276f55eadaf0e34ba03d5b43bfbfae0, type: 3}
+    MinNumberOfObject: 15
+    AllowGrow: 1
+    AutoDestroy: 1
+    clones: []
+  - ID: Angry2
+    SourcePrefab: {fileID: 1801004341784822, guid: de89eb4d167e00b4fab157953b8d3894, type: 3}
+    MinNumberOfObject: 15
+    AllowGrow: 1
+    AutoDestroy: 1
+    clones: []
+  - ID: Happy
+    SourcePrefab: {fileID: 180048, guid: 4a9bb31a555add44ba9d0dbc0c220e70, type: 3}
+    MinNumberOfObject: 15
+    AllowGrow: 1
+    AutoDestroy: 1
+    clones: []
+  - ID: Slam
+    SourcePrefab: {fileID: 195466, guid: 56c3274d2f9ec214ab584a80b5ce2d6d, type: 3}
+    MinNumberOfObject: 5
+    AllowGrow: 1
+    AutoDestroy: 1
+    clones: []
+  - ID: Sparkle
+    SourcePrefab: {fileID: 1858798456717250, guid: 7a56efbee0c3d4a44a4d6c1a84564568, type: 3}
+    MinNumberOfObject: 5
+    AllowGrow: 1
+    AutoDestroy: 1
+    clones: []
+  - ID: FoodSpark
+    SourcePrefab: {fileID: 114476, guid: 225085907981d1a4f9901b6ced5b2657, type: 3}
+    MinNumberOfObject: 0
+    AllowGrow: 1
+    AutoDestroy: 1
+    clones: []
   DefaultCount: 10
   initScale: {x: 0, y: 0, z: 0}
 --- !u!4 &927137609
@@ -460,7 +539,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1907630662
 PrefabInstance:
@@ -475,7 +554,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 465288, guid: a9d27d37bab3c447b8eb7a2a6756e952, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 465288, guid: a9d27d37bab3c447b8eb7a2a6756e952, type: 3}
       propertyPath: m_LocalPosition.x
@@ -528,7 +607,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6207133488976360133, guid: 0bfe3b149145747cc92dc53bb4df4e9b, type: 3}
       propertyPath: m_RootOrder
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 6207133488976360133, guid: 0bfe3b149145747cc92dc53bb4df4e9b, type: 3}
       propertyPath: m_LocalPosition.x

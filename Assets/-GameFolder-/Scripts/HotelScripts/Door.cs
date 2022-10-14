@@ -30,10 +30,13 @@ public class Door : MonoBehaviour, IInteractable
                 customer.SetToRoom(room);
                 room.SetCustomer(customer);
                 manager.SetCustomer(null);
-
-                grayArea.DOScale(scale + Vector3.one * 0.1f, 0.5f)
-                    .OnComplete(() => grayArea.DOScale(scale, 0.5f));
             }
         }
+    }
+
+    public void SetGrayArea(bool set)
+    {
+        if (set) grayArea.DOScale(0, 0.5f);
+        else grayArea.DOScale(scale, 0.5f);
     }
 }

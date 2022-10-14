@@ -7,14 +7,23 @@ public class Coaches : MonoBehaviour, IPurchasable
 {
     public bool available;
     private Vector3 scale;
-
+    private PurchaseBehaviour purchaseBehaviour;
     private void Awake()
     {
         scale = transform.localScale;
         transform.localScale = Vector3.zero;
     }
-    public int GetCost()
+    private void Start()
     {
+        if (available)
+        {
+            purchaseBehaviour.Loaded();
+            GetPurchased();
+        }
+    }
+    public int GetCost(PurchaseBehaviour pb)
+    {
+        purchaseBehaviour = pb;
         return 250;
     }
 
@@ -24,5 +33,15 @@ public class Coaches : MonoBehaviour, IPurchasable
         {
             available = true;
         });
+    }
+
+    public bool IsPurchased()
+    {
+        return available;
+    }
+
+    public void SetBool(bool set)
+    {
+        available = set;
     }
 }

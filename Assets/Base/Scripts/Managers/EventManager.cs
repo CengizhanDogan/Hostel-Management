@@ -15,6 +15,6 @@ public static class EventManager
 	#endregion
 }
 public class GemCollectEvent : UnityEvent<Vector3, Action> { }
-public class PurchaseEvent : UnityEvent<int> { }
+public class PurchaseEvent : UnityEvent<int, bool> { }
 public class TutorialEvent : UnityEvent<Transform> { }
 public class CustomerLeaveEvent : UnityEvent { }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class DoorMovement : MonoBehaviour
 {
@@ -18,7 +19,6 @@ public class DoorMovement : MonoBehaviour
         countDown = resetTime;
         rb = GetComponent<Rigidbody>();
         euler = transform.localEulerAngles;
-
     }
 
     private void Update()
@@ -28,6 +28,7 @@ public class DoorMovement : MonoBehaviour
             canBePushed = true;
         }
     }
+
     private void OnCollisionEnter(Collision collision)
     {
         if (!canBePushed) return;
@@ -35,6 +36,7 @@ public class DoorMovement : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Player") ||
             collision.gameObject.layer == LayerMask.NameToLayer("Customer"))
         {
+            AudioManager.Instance.DoorSound();
             countDown = resetTime;
             rb.isKinematic = false;
             DOTween.KillAll(transform);

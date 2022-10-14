@@ -22,23 +22,32 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
 
     public Cloud cloud;
     [SerializeField] private Order order;
+    private PurchaseBehaviour purchaseBehaviour;
+    public Collidor collidor;
 
     private void Start()
     {
         order.room = this;
+        if (available && !collidor)
+        {
+            if (purchaseBehaviour) purchaseBehaviour.Loaded();
+            GetPurchased();
+        }
     }
     public void SetCustomer(CustomerBehaviour customer)
     {
+        if (!customer) timer.StopTimer();
         roomCustomer = customer;
         door.coll.enabled = !customer;
         if (customer) timer.StartTimer();
-        else timer.StopTimer();
+        door.SetGrayArea(customer);
     }
 
     public CustomerBehaviour GetCustomer() { return roomCustomer; }
 
-    public int GetCost()
+    public int GetCost(PurchaseBehaviour pb)
     {
+        purchaseBehaviour = pb;
         return roomValue;
     }
 
@@ -46,11 +55,15 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
     {
         doorRb.isKinematic = false;
 
-        transform.DOMoveY(0, 1f).SetEase(Ease.OutBack).OnComplete(() =>
+        transform.DOMoveY(0, .5f).SetEase(Ease.Flash).OnComplete(() =>
         {
+            var spawnPos = transform.position; spawnPos.y += 0.5f;
+            var particle = PoolingSystem.Instance.InstantiateAPS("Slam", spawnPos);
+            particle.transform.eulerAngles = Vector3.right * 90f;
             available = true;
             door.coll.enabled = true;
             doorRb.isKinematic = false;
+            particle.transform.DOScale(2f, 5f).OnComplete(() => PoolingSystem.Instance.DestroyAPS(particle));
         });
         foreach (var longWall in longWalls)
         {
@@ -73,5 +86,15 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
     public void SetOrder(bool set)
     {
         order.SetBubbles(set);
+    }
+
+    public bool IsPurchased()
+    {
+        return available;
+    }
+
+    public void SetBool(bool set)
+    {
+        available = set;
     }
 }

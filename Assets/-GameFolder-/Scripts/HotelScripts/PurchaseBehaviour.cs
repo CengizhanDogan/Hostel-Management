@@ -34,15 +34,14 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
         EventManager.OnPurchaseEvent.RemoveListener(CheckEnable);
     }
 
-    private void Start()
+    private void Awake()
     {
         purchaseManager = PurchaseManager.Instance;
         if (enableOrder != 0) Disable();
         else activated = true;
 
         purchasable = purchaseObject.GetComponent<IPurchasable>();
-        purchaseManager.AddPurchasable(purchasable);
-        roomValue = purchasable.GetCost();
+        roomValue = purchasable.GetCost(this);
         loopValue = roomValue;
         textMesh.text = roomValue.ToString();
         var scale = line.localScale + Vector3.one * 0.1f;
@@ -54,7 +53,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 
         transform.localScale = Vector3.zero;
     }
-    private void CheckEnable(int order)
+    private void CheckEnable(int order, bool isLoaded)
     {
         if (enableOrder == 0) activated = true;
         if (enableOrder <= order && !activated)
@@ -66,7 +65,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 
             activated = true;
             transform.DOScale(scale, 0.5f).SetEase(Ease.OutBack);
-            EventManager.OnTutorialEvent.Invoke(transform);
+            if (!isLoaded) EventManager.OnTutorialEvent.Invoke(transform);
         }
     }
     public void Interact(Interactor interactor)
@@ -80,6 +79,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 
     private IEnumerator SpendMoneyToRoom(CustomerGetter manager)
     {
+        var audioManager = AudioManager.Instance;
         while (!exited)
         {
             if (PlayerPrefs.GetInt(PlayerPrefKeys.Coin) > 0 && roomValue > 0)
@@ -87,7 +87,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
                 PlayerPrefs.SetInt(PlayerPrefKeys.Coin, PlayerPrefs.GetInt(PlayerPrefKeys.Coin) - 1);
                 roomValue -= 1;
                 textMesh.text = roomValue.ToString();
-
+                if (roomValue > 5) audioManager.PlaySound(audioManager.MoneySound, 0.1f);
                 var spawnPos = manager.transform.position; spawnPos.y += 1;
                 var cash = PoolingSystem.Instance.InstantiateAPS("Cash", spawnPos);
                 cash.GetComponent<Money>().SetColliders(false);
@@ -103,8 +103,15 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
             if (roomValue <= 0)
             {
                 purchasable.GetPurchased();
-                if (!isUpgrade) purchaseManager.IncreaseOrder();
-                //Destroy(gameObject);
+                if (!isUpgrade)
+                {
+                    purchaseManager.IncreaseOrder(isLoaded: false);
+                    audioManager.PurchaseSound();
+                }
+                else
+                {
+                    audioManager.UpgradeSound();
+                }
                 gameObject.SetActive(false);
                 yield break;
             }
@@ -114,5 +121,11 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
     public void Exit()
     {
         exited = true;
+    }
+
+    public void Loaded()
+    {
+        PurchaseManager.Instance.IncreaseOrder(isLoaded: true);
+        Destroy(gameObject);
     }
 }

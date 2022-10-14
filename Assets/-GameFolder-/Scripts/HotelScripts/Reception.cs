@@ -14,18 +14,33 @@ public class Reception : Singleton<Reception>, IPurchasable
     public bool available;
 
     private Vector3 scale;
+    private PurchaseBehaviour purchaseBehaviour;
 
-    private void Awake()
+    [SerializeField] private AudioSource audioSource;
+
+    private void Start()
     {
         scale = transform.localScale;
-        transform.localScale = Vector3.zero;
+        if (available)
+        {
+            purchaseBehaviour.Loaded();
+            GetPurchased();
+        }
+        else
+        {
+            transform.localScale = Vector3.zero;
+        }
     }
     public void AddCustomer(CustomerBehaviour customer)
     {
         customers.Add(customer);
+        if (customers.Count >= 2)
+        {
+            audioSource.Play();
+        }
     }
     public Vector3 WaitPos(int offsetValue)
-    { 
+    {
         return waitTransform.position + (Vector3.right * 2f * offsetValue);
     }
     public Vector3 LookPos(float yPos)
@@ -36,10 +51,15 @@ public class Reception : Singleton<Reception>, IPurchasable
     public void RemoveCustomer(CustomerBehaviour customer)
     {
         customers.Remove(customer);
+        if (customers.Count < 2)
+        {
+            audioSource.Stop();
+        }
     }
 
-    public int GetCost()
+    public int GetCost(PurchaseBehaviour pb)
     {
+        purchaseBehaviour = pb;
         return 30;
     }
 
@@ -49,5 +69,15 @@ public class Reception : Singleton<Reception>, IPurchasable
         {
             available = true;
         });
+    }
+
+    public bool IsPurchased()
+    {
+        return available;
+    }
+
+    public void SetBool(bool set)
+    {
+        available = set;
     }
 }
