@@ -155,7 +155,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Android: com.Duuby.Game
+    Android: com.Gaia.HostelManagment
     Standalone: com.DefaultCompany.3D-GameDevelopmentBase
   buildNumber:
     Standalone: 0
@@ -245,7 +245,7 @@ PlayerSettings:
   useCustomBaseGradleTemplate: 0
   useCustomGradlePropertiesTemplate: 0
   useCustomProguardFile: 0
-  AndroidTargetArchitectures: 1
+  AndroidTargetArchitectures: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
   AndroidKeystoreName: "E:/masa\xFCst\xFC/unity/Keystores/BladeDuo.keystore"
@@ -688,6 +688,7 @@ PlayerSettings:
   webGLDecompressionFallback: 0
   scriptingDefineSymbols:
     1: MOREMOUNTAINS_NICEVIBRATIONS_RUMBLE;MOREMOUNTAINS_NICEVIBRATIONS;ODIN_INSPECTOR;ODIN_INSPECTOR_3;UNITY_POST_PROCESSING_STACK_V2
+    4: MOREMOUNTAINS_NICEVIBRATIONS_RUMBLE;MOREMOUNTAINS_NICEVIBRATIONS;ODIN_INSPECTOR;ODIN_INSPECTOR_3
     7: MOREMOUNTAINS_NICEVIBRATIONS_RUMBLE;MOREMOUNTAINS_NICEVIBRATIONS;ODIN_INSPECTOR;ODIN_INSPECTOR_3;UNITY_POST_PROCESSING_STACK_V2
     13: UNITY_POST_PROCESSING_STACK_V2
     14: UNITY_POST_PROCESSING_STACK_V2
@@ -702,7 +703,8 @@ PlayerSettings:
     33: UNITY_POST_PROCESSING_STACK_V2
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend: {}
+  scriptingBackend:
+    Android: 1
   il2cppCompilerConfiguration: {}
   managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
