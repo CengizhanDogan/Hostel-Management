@@ -12,6 +12,10 @@ public class Order : MonoBehaviour, IInteractable
 
     private void Start()
     {
+        if (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel) > 2)
+        {
+            PlayerPrefs.SetInt(PlayerPrefKeys.KitchenLevel, 2);
+        }
         coll = GetComponent<Collider>();
         scale = transform.parent.localScale;
         transform.parent.localScale = Vector3.zero;

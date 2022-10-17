@@ -44,8 +44,8 @@ public class ChefBehaviour : MonoBehaviour, IPurchasable
 
         void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
-        Func<bool> DoGet() => () => get && purchased;
-        Func<bool> DoGo() => () => go;
+        Func<bool> DoGet() => () => get && purchased && !delivery.GetFood();
+        Func<bool> DoGo() => () => go && delivery.GetFood();
         Func<bool> DoWait() => () => (!go || !get) && !delivery.GetFood();
         Func<bool> DoTrash() => () => (!go || !get) && delivery.GetFood();
     }

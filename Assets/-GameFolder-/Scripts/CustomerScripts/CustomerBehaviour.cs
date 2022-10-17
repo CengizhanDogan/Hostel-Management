@@ -32,6 +32,10 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
     private void Awake()
     {
+        if (Coaches.Instance.available)
+        {
+            patiance += patiance / 2;
+        }
         moneyCount = roomTime / 4;
         timer = Instantiate(timer, timerTransform.position, timer.transform.rotation);
         timer.timerObject = gameObject;
@@ -109,7 +113,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
     public void SpawnMoney()
     {
         moneyCount *= 1 + room.upgradeManager.listOrder;
-        if(hadFood) moneyCount += 5;
+        if(hadFood) moneyCount += 5 * (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel) + 1);
 
         for (int i = 0; i < moneyCount; i++)
         {

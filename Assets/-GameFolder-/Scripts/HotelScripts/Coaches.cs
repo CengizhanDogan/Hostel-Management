@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
-public class Coaches : MonoBehaviour, IPurchasable
+public class Coaches : Singleton<Coaches>, IPurchasable
 {
     public bool available;
     private Vector3 scale;
@@ -24,7 +24,7 @@ public class Coaches : MonoBehaviour, IPurchasable
     public int GetCost(PurchaseBehaviour pb)
     {
         purchaseBehaviour = pb;
-        return 250;
+        return 500;
     }
 
     public void GetPurchased()

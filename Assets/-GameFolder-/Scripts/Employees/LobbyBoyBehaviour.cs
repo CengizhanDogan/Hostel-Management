@@ -16,9 +16,11 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 
     private PurchaseBehaviour purchaseBehaviour;
     public Animator anim;
+    [HideInInspector] public CustomerGetter customerGetter;
 
     void Awake()
     {
+        customerGetter = GetComponent<CustomerGetter>();
         var startPos = transform.position;
         var navMeshAgent = GetComponent<NavMeshAgent>();
 
@@ -37,8 +39,8 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 
         void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
-        Func<bool> DoGet() => () => get && purchased;
-        Func<bool> DoGo() => () => go;
+        Func<bool> DoGet() => () => get && purchased && !customerGetter.GetCustomer();
+        Func<bool> DoGo() => () => go || customerGetter.GetCustomer();
         Func<bool> DoWait() => () => !go || !get;
         Func<bool> DontGet() => () => !get;
     }
@@ -159,7 +161,7 @@ public class LobbyBoyWait : IState
 
     public void OnEnter()
     {
-        if(Vector3.Distance(lobbyBoy.transform.position, startPos) > 0.1f)
+        if (Vector3.Distance(lobbyBoy.transform.position, startPos) > 0.1f)
             lobbyBoy.anim.SetBool("Walk", true);
         if (navMeshAgent.enabled) navMeshAgent.SetDestination(startPos);
         if (!doOnce)
@@ -216,6 +218,11 @@ public class GoToRoom : IState
     }
     public void OnEnter()
     {
+        FindRoom();
+    }
+
+    private void FindRoom()
+    {
         var closest = 99f;
         Room target = null;
         foreach (var room in RoomLister.Instance.rooms)
@@ -241,16 +248,22 @@ public class GoToRoom : IState
 
     public void OnExit()
     {
+        check = false;
     }
 
     public void Tick()
     {
         if (check)
         {
-            if (!navMeshAgent.hasPath)
+            if (!navMeshAgent.hasPath && !lobbyBoy.customerGetter.GetCustomer())
             {
                 lobbyBoy.get = false;
                 lobbyBoy.go = false;
+            }
+            if (!navMeshAgent.hasPath && lobbyBoy.customerGetter.GetCustomer())
+            {
+                check = false;
+                FindRoom();
             }
         }
     }

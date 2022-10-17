@@ -20471,7 +20471,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1185597154}
-  m_LocalRotation: {x: -0.16452467, y: 0.8222414, z: -0.45770776, w: -0.2955576}
+  m_LocalRotation: {x: -0.16452461, y: 0.8222415, z: -0.45770773, w: -0.29555756}
   m_LocalPosition: {x: 12.464055, y: 22.123066, z: 7.7594557}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -20715,7 +20715,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   listOrder: 0
-  cost: 100
+  cost: 300
   ugradeObjects:
   - {fileID: 762315226}
   - {fileID: 643525439}
@@ -20922,7 +20922,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1222933063}
-  m_LocalRotation: {x: -0.16452467, y: 0.8222414, z: -0.45770776, w: -0.2955576}
+  m_LocalRotation: {x: -0.16452461, y: 0.8222415, z: -0.45770773, w: -0.29555756}
   m_LocalPosition: {x: 12.464055, y: 22.123066, z: 7.7594557}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -28154,6 +28154,18 @@ PrefabInstance:
       propertyPath: longWalls.Array.data[0]
       value: 
       objectReference: {fileID: 1759944925}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.3879666
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: 0.14623904
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033618292129105, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 200
@@ -28226,6 +28238,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Collidor_3
       objectReference: {fileID: 0}
+    - target: {fileID: 4994033618337485363, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.3546658
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618337485363, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: -0.13944292
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033618407701398, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 160
@@ -28238,9 +28258,29 @@ PrefabInstance:
       propertyPath: longWalls.Array.data[1]
       value: 
       objectReference: {fileID: 1759944927}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.3892373
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.x
+      value: 7.1054274e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: 0.12215775
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033619155182132, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 160
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619190274436, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.4022481
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619190274436, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: -0.13909781
       objectReference: {fileID: 0}
     - target: {fileID: 6443548558448645122, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: enableOrder
@@ -30215,6 +30255,18 @@ PrefabInstance:
       propertyPath: longWalls.Array.data[0]
       value: 
       objectReference: {fileID: 1432771253}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.4003558
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: 0.14004445
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033618292129105, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 100
@@ -30287,6 +30339,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Collidor_2
       objectReference: {fileID: 0}
+    - target: {fileID: 4994033618337485363, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.3730297
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618337485363, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: -0.13026094
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033618407701398, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 80
@@ -30299,9 +30359,29 @@ PrefabInstance:
       propertyPath: longWalls.Array.data[1]
       value: 
       objectReference: {fileID: 208680225}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.3243521
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.x
+      value: 7.1054274e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: 0.15460032
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033619155182132, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 80
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619190274436, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.3828619
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619190274436, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: -0.14879096
       objectReference: {fileID: 0}
     - target: {fileID: 6443548558448645122, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: enableOrder
@@ -33079,6 +33159,14 @@ PrefabInstance:
     - target: {fileID: 7357086109926873135, guid: 87a445af4b7f3d842b1dac9b5496136c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 20.316746
+      objectReference: {fileID: 0}
+    - target: {fileID: 7903169985989060792, guid: 87a445af4b7f3d842b1dac9b5496136c, type: 3}
+      propertyPath: turnSpeed
+      value: 10000
+      objectReference: {fileID: 0}
+    - target: {fileID: 7903169985989060792, guid: 87a445af4b7f3d842b1dac9b5496136c, type: 3}
+      propertyPath: ignoreControllerMomentum
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8355486878407906547, guid: 87a445af4b7f3d842b1dac9b5496136c, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -39431,6 +39519,18 @@ PrefabInstance:
       propertyPath: longWalls.Array.data[0]
       value: 
       objectReference: {fileID: 604880888}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.3933597
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618065689883, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: 0.14354253
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033618292129105, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 50
@@ -39503,6 +39603,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Collidor
       objectReference: {fileID: 0}
+    - target: {fileID: 4994033618337485363, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.3221483
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033618337485363, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: -0.15570164
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033618407701398, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 40
@@ -39515,9 +39623,29 @@ PrefabInstance:
       propertyPath: longWalls.Array.data[1]
       value: 
       objectReference: {fileID: 1026565669}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.4142693
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.x
+      value: 7.1054274e-15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619099868201, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: 0.10964173
+      objectReference: {fileID: 0}
     - target: {fileID: 4994033619155182132, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: cost
       value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619190274436, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Size.z
+      value: 1.4262121
+      objectReference: {fileID: 0}
+    - target: {fileID: 4994033619190274436, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
+      propertyPath: m_Center.z
+      value: -0.12711585
       objectReference: {fileID: 0}
     - target: {fileID: 6443548558448645122, guid: b70ac606367c76d499cc0b438d9e24ee, type: 3}
       propertyPath: enableOrder
