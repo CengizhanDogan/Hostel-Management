@@ -125,7 +125,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 
     public void Loaded()
     {
-        PurchaseManager.Instance.IncreaseOrder(isLoaded: true);
+        purchaseManager.IncreaseOrder(isLoaded: true);
         Destroy(gameObject);
     }
 }

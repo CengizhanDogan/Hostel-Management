@@ -14,7 +14,7 @@ public class FoodOrder : MonoBehaviour
         {
             return customer.roomTime < roomTime
                 && customer.roomTime > roomTime / 3 
-                && Random.value > 0.05f
+                && Random.value > 0.005f
                 && Kitchen.Instance.available;
         }
     }
@@ -39,5 +39,6 @@ public class FoodOrder : MonoBehaviour
     public void OrderDone()
     {
         HasOrder = false;
+        customer.hadFood = true;
     }
 }

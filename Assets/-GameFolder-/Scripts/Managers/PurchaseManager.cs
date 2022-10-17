@@ -2,10 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class PurchaseManager : Singleton<PurchaseManager>
 {
     private List<IPurchasable> purchasables = new List<IPurchasable>();
+    [SerializeField]private List<UpgradeManager> upgrades = new List<UpgradeManager>();
 
     private int buttonOrder;
 
@@ -15,8 +17,31 @@ public class PurchaseManager : Singleton<PurchaseManager>
     {
         saveManager = SaveManager.Instance;
 
+        SetPurchasables();
+        SetUpgrades();
+    }
+
+    private void SetUpgrades()
+    {
+        var upgradeArray =
+           FindObjectsOfType<UpgradeManager>();
+
+        foreach (var upgrade in upgradeArray)
+        {
+            upgrades.Add(upgrade);
+        }
+        foreach (UpgradeManager upgrade in upgrades)
+        {
+            if (upgrades.IndexOf(upgrade) >= saveManager.saveData.
+                upgraded.Count) return;
+            upgrade.listOrder = saveManager.saveData.upgraded[upgrades.IndexOf(upgrade)];
+        }
+    }
+
+    private void SetPurchasables()
+    {
         var purchasableArray =
-            FindObjectsOfType<MonoBehaviour>().OfType<IPurchasable>();
+           FindObjectsOfType<MonoBehaviour>().OfType<IPurchasable>();
 
         foreach (var purchaseable in purchasableArray)
         {
@@ -30,6 +55,7 @@ public class PurchaseManager : Singleton<PurchaseManager>
                 purchased[purchasables.IndexOf(purchase)]);
         }
     }
+
     private void OnApplicationQuit()
     {
         SaveList();
@@ -49,6 +75,19 @@ public class PurchaseManager : Singleton<PurchaseManager>
                     [purchasables.IndexOf(purchase)] = purchase.IsPurchased();
             }
         }
+        foreach (UpgradeManager upgrade in upgrades)
+        {
+            if (upgrades.IndexOf(upgrade) >=
+                saveManager.saveData.upgraded.Count)
+            {
+                saveManager.saveData.upgraded.Add(upgrade.listOrder);
+            }
+            else
+            {
+                saveManager.saveData.upgraded
+                    [upgrades.IndexOf(upgrade)] = upgrade.listOrder;
+            }
+        }
 
         saveManager.Save();
     }
@@ -57,4 +96,5 @@ public class PurchaseManager : Singleton<PurchaseManager>
         buttonOrder++;
         EventManager.OnPurchaseEvent.Invoke(buttonOrder, isLoaded);
     }
+    public int ButtonOrder { get => buttonOrder; }
 }

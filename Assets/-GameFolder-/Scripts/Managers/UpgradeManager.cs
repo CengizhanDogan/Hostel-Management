@@ -7,7 +7,7 @@ using System;
 public class UpgradeManager : MonoBehaviour, IPurchasable
 {
     private int updateCount;
-    private int listOrder;
+    public int listOrder;
     [SerializeField] private int cost;
 
     [SerializeField] private List<GameObject> ugradeObjects = new List<GameObject>();
@@ -15,26 +15,49 @@ public class UpgradeManager : MonoBehaviour, IPurchasable
     [SerializeField] private List<Material> materials = new List<Material>();
 
     [SerializeField] private bool isKitchen;
+    private PurchaseBehaviour purchaseBehaviour;
+    private bool load;
     private void Start()
     {
-
+        if (listOrder > 0)
+        {
+            Destroy(purchaseBehaviour.gameObject);
+            load = true;
+            GetPurchased();
+        }
     }
     public int GetCost(PurchaseBehaviour pb)
     {
+        purchaseBehaviour = pb;
         UpdateValues();
         return cost;
     }
 
     public void GetPurchased()
     {
+        if (listOrder < 2 && !load) listOrder++;
+
+        load = false;
+
         SetMaterials();
-        var removedObject = ugradeObjects[listOrder];
 
-        removedObject.transform.DOScale(0, 0.5f)
-            .OnComplete(() => removedObject.SetActive(false));
+        var removedObject = ugradeObjects[listOrder - 1];
+
+        for (int i = 0; i < listOrder; i++)
+        {
+            if (ugradeObjects[i].activeSelf)
+            {
+                removedObject = ugradeObjects[i];
+            }
+        }
+
+        removedObject.transform.DOScale(0, 0.5f).OnComplete(() =>
+            {
+                removedObject.SetActive(false);
+            });
 
 
-        var upgradedTransform = ugradeObjects[listOrder + 1].transform;
+        var upgradedTransform = ugradeObjects[listOrder].transform;
 
         upgradedTransform.gameObject.SetActive(true);
 
@@ -43,9 +66,9 @@ public class UpgradeManager : MonoBehaviour, IPurchasable
         var particle = PoolingSystem.Instance.InstantiateAPS("Sparkle", spawnPos);
 
         upgradedTransform.DOScale(scale, 0.5f).SetEase(Ease.OutBounce).OnComplete(() =>
-        {
-            particle.transform.DOScale(2f, 5f).OnComplete(() => PoolingSystem.Instance.DestroyAPS(particle));
-        });
+            {
+                particle.transform.DOScale(2f, 5f).OnComplete(() => PoolingSystem.Instance.DestroyAPS(particle));
+            });
 
         if (isKitchen)
         {
@@ -61,23 +84,21 @@ public class UpgradeManager : MonoBehaviour, IPurchasable
             if (!renderers[i]) continue;
             if (renderers.Count > 2 && i == renderers.Count - 1)
             {
-                renderers[i].material = materials[listOrder + 2];
+                renderers[i].material = materials[listOrder + 1];
             }
             else
             {
-                renderers[i].material = materials[listOrder];
+                renderers[i].material = materials[listOrder - 1];
             }
         }
     }
 
     private void UpdateValues()
     {
-        if (updateCount > 0)
+        if (listOrder > 0)
         {
-            listOrder++;
             cost *= 2;
         }
-        updateCount++;
     }
 
     public bool IsPurchased()

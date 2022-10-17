@@ -22,7 +22,7 @@ public class StarPanel : MonoBehaviour
     }
     private void SetStars()
     {
-        float targetValue = PlayerPrefs.GetInt(PlayerPrefKeys.HotelStarLevel);
+        float targetValue = PlayerPrefs.GetInt(PlayerPrefKeys.HostelStarLevel);
 
         float starValue = Mathf.Floor(targetValue / 20f);
         float fillValue = (targetValue - (starValue * 20));
@@ -33,7 +33,7 @@ public class StarPanel : MonoBehaviour
                 star.fillAmount = 1;
             else if (stars.IndexOf(star) > starValue) star.fillAmount = 0;
 
-            if (star.fillAmount >= 1 || stars.IndexOf(star) > starValue)
+            if (stars.IndexOf(star) < starValue || stars.IndexOf(star) > starValue)
                 continue;
 
             DOTween.To(() => star.fillAmount, x =>

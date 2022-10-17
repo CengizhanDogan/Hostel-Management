@@ -11,6 +11,7 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
     public int roomValue;
 
     public Door door;
+    public UpgradeManager upgradeManager;
 
     [SerializeField] private Timer timer;
     public bool available;
@@ -27,6 +28,7 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
 
     private void Start()
     {
+        upgradeManager = GetComponentInChildren<UpgradeManager>();
         order.room = this;
         if (available && !collidor)
         {

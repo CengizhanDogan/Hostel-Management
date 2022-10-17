@@ -23,14 +23,16 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
     public bool interacted;
     [HideInInspector] public bool exit;
     [HideInInspector] public bool giveMoney;
+    [HideInInspector] public bool hadFood;
 
     [SerializeField] private Timer timer;
     public Transform timerTransform;
     public Transform areaTransform;
 
+
     private void Awake()
     {
-        moneyCount = roomTime;
+        moneyCount = roomTime / 4;
         timer = Instantiate(timer, timerTransform.position, timer.transform.rotation);
         timer.timerObject = gameObject;
         timer.follow = true;
@@ -106,6 +108,9 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
     public void SpawnMoney()
     {
+        moneyCount *= 1 + room.upgradeManager.listOrder;
+        if(hadFood) moneyCount += 5;
+
         for (int i = 0; i < moneyCount; i++)
         {
             Vector3 spawnPos = (UnityEngine.Random.insideUnitCircle * 1f);
@@ -152,7 +157,7 @@ public class ExitHotel : IState
 
     public void Tick()
     {
-        var starValue = PlayerPrefs.GetInt(PlayerPrefKeys.HotelStarLevel);
+        var starValue = PlayerPrefs.GetInt(PlayerPrefKeys.HostelStarLevel);
         if (customerBehaviour.giveMoney)
         {
             customerBehaviour.room.cloud.SetCloud(false);
@@ -174,9 +179,9 @@ public class ExitHotel : IState
                 customerBehaviour.SpawnMoney();
 
                 if(starValue < 100)
-                PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
-                    starValue + 5);
-                else PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
+                PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
+                    starValue + 1);
+                else PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
                     100);
 
                 particle = PoolingSystem.Instance.InstantiateAPS("Happy", customerBehaviour.timerTransform.position);
@@ -188,11 +193,11 @@ public class ExitHotel : IState
             navMeshAgent.SetDestination(pos); 
             if (Reception.Instance.customers.Contains(customerBehaviour))
             {
-                if (starValue > 5)
-                PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
-                        starValue - 5);
+                if (starValue > 1)
+                PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
+                        starValue -1);
                 else if (starValue < 0)
-                    PlayerPrefs.SetInt(PlayerPrefKeys.HotelStarLevel,
+                    PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
                         0);
 
                 particle = PoolingSystem.Instance.InstantiateAPS("Angry", customerBehaviour.timerTransform.position);
