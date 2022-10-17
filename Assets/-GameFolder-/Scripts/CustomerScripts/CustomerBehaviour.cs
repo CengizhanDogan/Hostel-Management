@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 using DG.Tweening;
+using GameAnalyticsSDK;
+
 public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 {
     public CustomerAnimation customerAnimation;
@@ -188,10 +190,12 @@ public class ExitHotel : IState
                 else PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
                     100);
 
+                
                 particle = PoolingSystem.Instance.InstantiateAPS("Happy", customerBehaviour.timerTransform.position);
 
                 particle.transform.SetParent(customerBehaviour.transform);
             }
+
         if (canExit && !navMeshAgent.hasPath)
         {
             navMeshAgent.SetDestination(pos); 

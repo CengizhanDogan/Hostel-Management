@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using System;
+using GameAnalyticsSDK;
 
 public class Room : MonoBehaviour, IPurchasable, ITimer
 {
@@ -70,6 +71,10 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
         foreach (var longWall in longWalls)
         {
             longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack).OnComplete(() => Destroy(longWall.gameObject));
+        }
+        if (purchaseBehaviour)
+        {
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Room", 1, "element", "0003");
         }
     }
 

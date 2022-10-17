@@ -16,5 +16,5 @@ MonoBehaviour:
   useGameAnalytics: 1
   gameAnalyticsIosGameKey: 
   gameAnalyticsIosSecretKey: 
-  gameAnalyticsAndroidGameKey: 
-  gameAnalyticsAndroidSecretKey: 
+  gameAnalyticsAndroidGameKey: de9c14855a3becaeed5854995136ce0f
+  gameAnalyticsAndroidSecretKey: d160f8169ed781e59706b3a25e5edc75bf136036

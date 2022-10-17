@@ -11,6 +11,7 @@ public class Money : MonoBehaviour, IInteractable
 
     [SerializeField] private bool isPlaced;
 
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using DG.Tweening;
+using GameAnalyticsSDK;
+using GameAnalyticsSDK.Events;
 
 public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 {
@@ -113,6 +115,8 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
                     audioManager.UpgradeSound();
                 }
                 gameObject.SetActive(false);
+
+                GameAnalytics.NewResourceEvent(GAResourceFlowType.Undefined, "money", PlayerPrefs.GetInt(PlayerPrefKeys.Coin), "currency", "0001");
                 yield break;
             }
             yield return new WaitForSeconds(1f / loopValue);

@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
+using GameAnalyticsSDK;
 
 public class StarPanel : MonoBehaviour
 {
     [SerializeField] private List<Image> stars = new List<Image>();
 
+    private float lastStarValue;
     private void OnEnable()
     {
         EventManager.OnCustomerLeave.AddListener(SetStars);
@@ -38,6 +40,11 @@ public class StarPanel : MonoBehaviour
 
             DOTween.To(() => star.fillAmount, x =>
             star.fillAmount = x, ((float)fillValue / 20f), 0.25f);
+        }
+        if (lastStarValue != starValue)
+        {
+            lastStarValue = starValue;
+            GameAnalytics.NewResourceEvent(GAResourceFlowType.Undefined, "StarLevel", starValue, "level", "0002");
         }
     }
 }
