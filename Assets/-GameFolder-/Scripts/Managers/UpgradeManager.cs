@@ -75,6 +75,8 @@ public class UpgradeManager : MonoBehaviour, IPurchasable
             PlayerPrefs.SetInt(PlayerPrefKeys.KitchenLevel,
             PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel) + 1);
         }
+
+        PurchaseManager.Instance.SaveList();
     }
 
     private void SetMaterials()

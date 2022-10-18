@@ -58,12 +58,12 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
     {
         doorRb.isKinematic = false;
 
+        available = true;
         transform.DOMoveY(0, .5f).SetEase(Ease.Flash).OnComplete(() =>
         {
             var spawnPos = transform.position; spawnPos.y += 0.5f;
             var particle = PoolingSystem.Instance.InstantiateAPS("Slam", spawnPos);
             particle.transform.eulerAngles = Vector3.right * 90f;
-            available = true;
             door.coll.enabled = true;
             doorRb.isKinematic = false;
             particle.transform.DOScale(2f, 5f).OnComplete(() => PoolingSystem.Instance.DestroyAPS(particle));

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using System.IO;
 
 public class SaveManager : Singleton<SaveManager>
 {
@@ -14,21 +15,12 @@ public class SaveManager : Singleton<SaveManager>
     }
     public void Save()
     {
-        PlayerPrefs.SetString(PlayerPrefKeys.Save, SaveHelper.Serialize<SaveData>(saveData));
+        saveData.Save();
     }
 
     public void Load()
     {
-        if (PlayerPrefs.HasKey(PlayerPrefKeys.Save))
-        {
-            saveData = SaveHelper.Deserialize<SaveData>(PlayerPrefs.GetString(PlayerPrefKeys.Save));
-        }
-        else
-        {
-            saveData = new SaveData();
-            Save();
-            Debug.Log("No new save file found creating new one");
-        }
+        saveData = SaveData.Load();
     }
     [Button]
     public void ResetSave()

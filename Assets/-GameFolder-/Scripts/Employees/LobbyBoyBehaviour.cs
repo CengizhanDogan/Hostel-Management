@@ -39,10 +39,10 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 
         void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
-        Func<bool> DoGet() => () => get && purchased && !customerGetter.GetCustomer();
-        Func<bool> DoGo() => () => go || customerGetter.GetCustomer();
-        Func<bool> DoWait() => () => !go || !get;
-        Func<bool> DontGet() => () => !get;
+        Func<bool> DoGet() => () => (get && purchased && !customerGetter.GetCustomer()) && navMeshAgent.enabled;
+        Func<bool> DoGo() => () => (go || customerGetter.GetCustomer()) && navMeshAgent.enabled;
+        Func<bool> DoWait() => () => (!go || !get )&& navMeshAgent.enabled;
+        Func<bool> DontGet() => () => !get && navMeshAgent.enabled;
     }
     private void Start()
     {
@@ -73,8 +73,8 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
             .OnComplete(() =>
             {
                 GetComponent<NavMeshAgent>().enabled = true;
-                purchased = true;
             });
+        purchased = true;
     }
 
     public bool IsPurchased()

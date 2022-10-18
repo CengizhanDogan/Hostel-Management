@@ -29,9 +29,9 @@ public class Coaches : Singleton<Coaches>, IPurchasable
 
     public void GetPurchased()
     {
+        available = true;
         transform.DOScale(scale, 0.5f).SetEase(Ease.OutBounce).OnComplete(() =>
         {
-            available = true;
         });
     }
 

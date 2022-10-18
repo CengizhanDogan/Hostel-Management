@@ -7,7 +7,7 @@ using System;
 public class PurchaseManager : Singleton<PurchaseManager>
 {
     private List<IPurchasable> purchasables = new List<IPurchasable>();
-    [SerializeField]private List<UpgradeManager> upgrades = new List<UpgradeManager>();
+    [SerializeField] private List<UpgradeManager> upgrades = new List<UpgradeManager>();
 
     private int buttonOrder;
 
@@ -55,12 +55,7 @@ public class PurchaseManager : Singleton<PurchaseManager>
                 purchased[purchasables.IndexOf(purchase)]);
         }
     }
-
-    private void OnApplicationQuit()
-    {
-        SaveList();
-    }
-    private void SaveList()
+    public void SaveList()
     {
         foreach (IPurchasable purchase in purchasables)
         {
@@ -94,6 +89,7 @@ public class PurchaseManager : Singleton<PurchaseManager>
     public void IncreaseOrder(bool isLoaded)
     {
         buttonOrder++;
+        if (!isLoaded) SaveList();
         EventManager.OnPurchaseEvent.Invoke(buttonOrder, isLoaded);
     }
     public int ButtonOrder { get => buttonOrder; }

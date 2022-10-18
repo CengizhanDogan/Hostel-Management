@@ -44,10 +44,10 @@ public class ChefBehaviour : MonoBehaviour, IPurchasable
 
         void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
-        Func<bool> DoGet() => () => get && purchased && !delivery.GetFood();
-        Func<bool> DoGo() => () => go && delivery.GetFood();
-        Func<bool> DoWait() => () => (!go || !get) && !delivery.GetFood();
-        Func<bool> DoTrash() => () => (!go || !get) && delivery.GetFood();
+        Func<bool> DoGet() => () => (get && purchased && !delivery.GetFood()) && navMeshAgent.enabled;
+        Func<bool> DoGo() => () => (go && delivery.GetFood()) && navMeshAgent.enabled;
+        Func<bool> DoWait() => () => ((!go || !get) && !delivery.GetFood()) && navMeshAgent.enabled;
+        Func<bool> DoTrash() => () => ((!go || !get) && delivery.GetFood()) && navMeshAgent.enabled;
     }
 
     private void Start()
@@ -79,8 +79,8 @@ public class ChefBehaviour : MonoBehaviour, IPurchasable
             .OnComplete(() =>
             {
                 GetComponent<NavMeshAgent>().enabled = true;
-                purchased = true;
             });
+        purchased = true;
     }
 
     public bool IsPurchased()
