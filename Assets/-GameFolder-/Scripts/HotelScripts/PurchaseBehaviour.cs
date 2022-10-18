@@ -76,12 +76,12 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 
         if (!manager.isPlayer) return;
         exited = false;
-        StartCoroutine(SpendMoneyToRoom(manager));
+        StartCoroutine(SpendMoneyToPurchase(manager));
     }
 
-    private IEnumerator SpendMoneyToRoom(CustomerGetter manager)
+    private IEnumerator SpendMoneyToPurchase(CustomerGetter manager)
     {
-        yield return new WaitForSeconds(.75f);
+        yield return new WaitForSeconds(.5f);
         var audioManager = AudioManager.Instance;
         while (!exited)
         {

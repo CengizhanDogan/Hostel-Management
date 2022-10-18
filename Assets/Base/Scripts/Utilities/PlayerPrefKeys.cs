@@ -16,4 +16,6 @@ public static class PlayerPrefKeys
     public static readonly string HostelStarLevel = "HotelStarLevel";
     public static readonly string Tutorial = "Tutorial";
     public static readonly string Save = "Save";
+    public static readonly string KitchenTutorial = "KitchenTutorial";
+    public static readonly string CustomerTutorial = "CustomerTutorial";
 }

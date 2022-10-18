@@ -13,10 +13,20 @@ public class CustomerSpawner : MonoBehaviour
 
     IEnumerator Spawn()
     {
+        bool hasRoom = false;
         var reception = Reception.Instance;
         while (true)
         {
-            while (reception.available && reception.customers.Count < 8)
+            if (!hasRoom)
+                foreach (var room in RoomLister.Instance.rooms)
+                {
+                    if (room.available)
+                    {
+                        hasRoom = true;
+                    }
+                }
+
+            while (hasRoom && reception.customers.Count < 8)
             {
                 int starValue = 5 * (PlayerPrefs.GetInt(PlayerPrefKeys.HostelStarLevel) / 20);
                 if (starValue >= 15) starValue = 14;

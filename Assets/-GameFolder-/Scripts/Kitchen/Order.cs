@@ -9,7 +9,7 @@ public class Order : MonoBehaviour, IInteractable
     private Vector3 scale;
     private Collider coll;
     public Room room;
-
+    [SerializeField] private Transform tutorialTransform;
     private void Start()
     {
         if (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel) > 2)
@@ -31,9 +31,16 @@ public class Order : MonoBehaviour, IInteractable
                 item.SetActive(false);
             }
 
-            orderBubbles[PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel)].SetActive(true);
+            var bubble = orderBubbles[PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel)];
+            bubble.SetActive(true);
 
             scale = this.scale;
+
+            if (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenTutorial) == 0)
+            {
+                PlayerPrefs.SetInt(PlayerPrefKeys.KitchenTutorial, 1);
+                TutorialManager.Instance.KitchenTutorial(tutorialTransform);
+            }
         }
 
         coll.enabled = set;
@@ -60,7 +67,7 @@ public class Order : MonoBehaviour, IInteractable
 
             food.transform.DOScale(0, 0.5f).OnComplete(() =>
             {
-                particle.transform.DOScale(2f, 5f).OnComplete(() => 
+                particle.transform.DOScale(2f, 5f).OnComplete(() =>
                 PoolingSystem.Instance.DestroyAPS(particle));
 
                 if (anim) anim.SetTrayAnimation(false);

@@ -22,17 +22,18 @@ public class MoneyPositioner : Singleton<MoneyPositioner>, IInteractable, IExita
         var pos = Vector3.zero;
         money.transform.localScale = Vector3.one;
 
-        if (moneyList.Count % 8 == 0) { yOrder++; zOrder = 0; }
-
         pos += Vector3.forward * zSpace * zOrder;
-
-        if (moneyList.Count % 2 == 0) pos += Vector3.right * xSpace;
-        else zOrder++;
-
         pos += Vector3.up * ySpace * yOrder;
+
+        if (moneyList.Count % 2 == 0)
+        { pos += Vector3.right * xSpace; zOrder++; }
+
+        if (moneyList.Count % 8 == 0) { yOrder++; }
 
         money.transform.DOLocalRotate(Vector3.zero, 0.25f);
         money.transform.DOLocalMove(pos, 0.5f);
+
+        if (moneyList.Count % 8 == 0) { zOrder = 0; }
     }
     public void Interact(Interactor interactor)
     {

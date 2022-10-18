@@ -93,7 +93,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
             customer.SetReorder();
         }
         areaTransform.DOScale(0, 0.6f).SetEase(Ease.InBack)
-            .OnComplete(()=> Destroy(areaTransform.gameObject));
+            .OnComplete(() => Destroy(areaTransform.gameObject));
     }
 
     public void SetToRoom(Room room)
@@ -115,7 +115,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
     public void SpawnMoney()
     {
         moneyCount *= 1 + room.upgradeManager.listOrder;
-        if(hadFood) moneyCount += 5 * (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel) + 1);
+        if (hadFood) moneyCount += 5 * (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel) + 1);
 
         for (int i = 0; i < moneyCount; i++)
         {
@@ -180,13 +180,13 @@ public class ExitHotel : IState
                 giveMoney = false;
                 customerBehaviour.SpawnMoney();
 
-                if(starValue < 100)
-                PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
-                    starValue + 1);
+                if (starValue < 100)
+                    PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
+                        starValue + 1);
                 else PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
                     100);
 
-                
+
                 particle = PoolingSystem.Instance.InstantiateAPS("Happy", customerBehaviour.timerTransform.position);
 
                 particle.transform.SetParent(customerBehaviour.transform);
@@ -194,12 +194,12 @@ public class ExitHotel : IState
 
         if (canExit && !navMeshAgent.hasPath)
         {
-            navMeshAgent.SetDestination(pos); 
+            navMeshAgent.SetDestination(pos);
             if (Reception.Instance.customers.Contains(customerBehaviour))
             {
-                if (starValue > 1)
-                PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
-                        starValue -1);
+                if (starValue > 0)
+                    PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
+                            starValue - 10);
                 else if (starValue < 0)
                     PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
                         0);

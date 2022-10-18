@@ -42,7 +42,7 @@ public class CameraManager : MonoBehaviour
             if (!targets[i]) continue;
 
             var cam = PoolingSystem.Instance.InstantiateAPS("Cam")
-                .GetComponent<CinemachineVirtualCamera>(); 
+                .GetComponent<CinemachineVirtualCamera>();
 
             cams.Add(cam);
             cams[i].Follow = targets[i];

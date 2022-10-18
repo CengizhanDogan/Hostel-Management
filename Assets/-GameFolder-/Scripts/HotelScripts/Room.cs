@@ -85,6 +85,11 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
             door.coll.enabled = true;
             doorRb.isKinematic = false;
             particle.transform.DOScale(2f, 5f).OnComplete(() => PoolingSystem.Instance.DestroyAPS(particle));
+            if (PlayerPrefs.GetInt(PlayerPrefKeys.CustomerTutorial) == 0)
+            {
+                PlayerPrefs.SetInt(PlayerPrefKeys.CustomerTutorial, 1);
+                TutorialManager.Instance.CustomerTutorial(door.transform);
+            }
         });
         foreach (var longWall in longWalls)
         {

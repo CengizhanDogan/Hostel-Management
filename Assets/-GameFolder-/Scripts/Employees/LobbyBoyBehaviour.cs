@@ -192,6 +192,7 @@ public class GetCustomer : IState
     {
         if (!customer || !lobbyBoy.HasRoom)
         {
+            Debug.Log("Go Wait");
             lobbyBoy.get = false;
             lobbyBoy.wait = true;
             return;
@@ -200,12 +201,14 @@ public class GetCustomer : IState
         {
             if (Reception.Instance.customers.Count > 0 && !lobbyBoy.customerGetter.GetCustomer())
             {
+                Debug.Log("Get New");
                 customer = Reception.Instance.customers[0];
                 navMeshAgent.SetDestination(customer.transform.position);
                 return;
             }
-            else
+            else if (!lobbyBoy.customerGetter.GetCustomer())
             {
+                Debug.LogWarning("No Customer");
                 lobbyBoy.get = false;
                 lobbyBoy.wait = true;
                 return;
@@ -213,6 +216,7 @@ public class GetCustomer : IState
         }
         if (lobbyBoy.customerGetter.GetCustomer())
         {
+            Debug.Log("GO ROOM");
             lobbyBoy.get = false;
             lobbyBoy.go = true;
             return;
@@ -272,14 +276,16 @@ public class GoToRoom : IState
         {
             lobbyBoy.go = false;
             lobbyBoy.wait = true;
+            return;
         }
         if (check)
         {
-            if (!navMeshAgent.hasPath && !lobbyBoy.customerGetter.GetCustomer())
+            if (!navMeshAgent.hasPath || !lobbyBoy.customerGetter.GetCustomer())
             {
                 lobbyBoy.get = false;
                 lobbyBoy.go = false;
                 lobbyBoy.wait = true;
+                return;
             }
             if (!navMeshAgent.hasPath && lobbyBoy.customerGetter.GetCustomer())
             {

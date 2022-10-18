@@ -23,20 +23,23 @@ public class Bell : Singleton<Bell>
     }
     public void RingBell()
     {
-        DOTween.CompleteAll(this);
+        transform.DOComplete(this);
         bellRing.Play();
         float blendValue = 0f;
 
         exclamationBubble.DOScale(bubbleScale, 0.5f).SetEase(Ease.OutBounce);
 
-        transform.DOScale(scale + Vector3.one * 1.1f, 0.5f).SetEase(Ease.OutBounce)
-            .OnComplete(() => transform.DOScale(scale, 0.5f).SetEase(Ease.Linear)
-            .OnComplete(() => transform.localScale = scale));
+        transform.DOScale(scale + Vector3.one * 1.1f, 0.5f).SetEase(Ease.OutBounce);
 
         DOTween.To(() => blendValue, x => blendValue = x, 100, 0.25f)
             .OnUpdate(() => rend.SetBlendShapeWeight(0, blendValue))
-            .OnComplete(() => DOTween.To(() => blendValue, x => blendValue = x, 0, 0.25f)
-            .OnUpdate(() => rend.SetBlendShapeWeight(0, blendValue)));
+            .OnComplete(() =>
+            {
+                DOTween.To(() => blendValue, x => blendValue = x, 0, 0.25f);
+                transform.DOScale(scale, 0.5f).SetEase(Ease.Linear)
+                .OnComplete(() => transform.localScale = scale);
+            })
+            .OnUpdate(() => rend.SetBlendShapeWeight(0, blendValue));
     }
 
     public void DestroyBubble()
