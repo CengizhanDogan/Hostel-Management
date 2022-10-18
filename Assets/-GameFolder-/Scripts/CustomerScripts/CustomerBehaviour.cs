@@ -119,14 +119,10 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
         for (int i = 0; i < moneyCount; i++)
         {
-            Vector3 spawnPos = (UnityEngine.Random.insideUnitCircle * 1f);
-            spawnPos.z = spawnPos.y; spawnPos.y = 0f;
-            spawnPos += transform.position; spawnPos.y += 1f;
+            var spawnPos = transform.position; spawnPos.y += 1f;
 
             var cash = PoolingSystem.Instance.InstantiateAPS("Cash", spawnPos);
-            cash.GetComponent<Money>().SetColliders(true);
-
-            cash.transform.DOJump(spawnPos, 2.5f, 1, 1f).SetId("Jump");
+            MoneyPositioner.Instance.PositionMoney(cash.GetComponent<Money>());
         }
     }
 

@@ -26,6 +26,7 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
     [SerializeField] private Order order;
     private PurchaseBehaviour purchaseBehaviour;
     public Collidor collidor;
+    [SerializeField] private Renderer shadow;
 
     private void Start()
     {
@@ -36,6 +37,7 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
             if (purchaseBehaviour) purchaseBehaviour.Loaded();
             GetPurchased();
         }
+        SetShadow(false);
     }
     public void SetCustomer(CustomerBehaviour customer)
     {
@@ -44,6 +46,22 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
         door.coll.enabled = !customer;
         if (customer) timer.StartTimer();
         door.SetGrayArea(customer);
+        SetShadow(customer);
+    }
+
+    private void SetShadow(bool set)
+    {
+        float alphaValue = 0;
+        if (set) alphaValue = 60;
+
+        float currentValue = shadow.material.color.a;
+        Color32 currentColor = shadow.material.color;
+
+        DOTween.To(() => currentValue, x => currentValue = x, alphaValue, 0.5f).OnUpdate(() => 
+            { 
+                currentColor.a = (byte)currentValue;
+                shadow.material.color = currentColor;
+            });
     }
 
     public CustomerBehaviour GetCustomer() { return roomCustomer; }
