@@ -20,6 +20,7 @@ public class MoneyPositioner : Singleton<MoneyPositioner>, IInteractable, IExita
         money.transform.SetParent(transform);
         moneyList.Add(money);
         var pos = Vector3.zero;
+        money.transform.localScale = Vector3.one;
 
         if (moneyList.Count % 8 == 0) { yOrder++; zOrder = 0; }
 
@@ -43,22 +44,23 @@ public class MoneyPositioner : Singleton<MoneyPositioner>, IInteractable, IExita
             StartCoroutine(GiveMoney(manager.transform));
         }
     }
-
     private IEnumerator GiveMoney(Transform followTransform)
     {
-        while (moneyList.Count > 0 || !exit)
+        while (!exit || moneyList.Count > 0)
         {
             for (int i = 0; i < moneyList.Count; i++)
             {
-                Debug.Log("GiveMoney");
                 StartCoroutine(moneyList[moneyList.Count - 1].Follow(followTransform));
                 moneyList.RemoveAt(moneyList.Count - 1);
                 yield return null;
             }
+            if (moneyList.Count <= 0)
+            {
+                zOrder = 0;
+                yOrder = 0;
+            }
             yield return null;
         }
-        zOrder = 0;
-        yOrder = 0;
 
     }
 

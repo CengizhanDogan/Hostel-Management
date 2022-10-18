@@ -81,6 +81,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
 
     private IEnumerator SpendMoneyToRoom(CustomerGetter manager)
     {
+        yield return new WaitForSeconds(.75f);
         var audioManager = AudioManager.Instance;
         while (!exited)
         {

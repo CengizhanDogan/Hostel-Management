@@ -26,6 +26,8 @@ public class Interactor : MonoBehaviour
         IExitable exitable = other.GetComponentInChildren<IExitable>();
         if (exitable != null)
         {
+            if (!TryGetComponent(out CustomerGetter cg)) return;
+            if (!cg.isPlayer) return;
             exitable.Exit();
         }
     }
@@ -35,6 +37,8 @@ public class Interactor : MonoBehaviour
         IExitable exitable = collision.collider.GetComponentInChildren<IExitable>();
         if (exitable != null)
         {
+            if (!TryGetComponent(out CustomerGetter cg)) return;
+            if (!cg.isPlayer) return;
             exitable.Exit();
         }
     }
