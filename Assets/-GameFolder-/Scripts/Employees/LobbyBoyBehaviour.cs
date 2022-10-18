@@ -33,30 +33,39 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
         At(waitBehaviour, getCustomer, DoGet());
         At(getCustomer, goToRoom, DoGo());
         At(goToRoom, waitBehaviour, DoWait());
-        At(getCustomer, waitBehaviour, DontGet());
+        At(getCustomer, waitBehaviour, DoWait());
 
         stateMachine.SetState(waitBehaviour);
 
         void At(IState to, IState from, Func<bool> predicate) => stateMachine.AddTransition(to, from, predicate);
 
-        Func<bool> DoGet() => () => (get && purchased && !customerGetter.GetCustomer()) && navMeshAgent.enabled;
-        Func<bool> DoGo() => () => (go || customerGetter.GetCustomer()) && navMeshAgent.enabled;
-        Func<bool> DoWait() => () => (!go || !get )&& navMeshAgent.enabled;
-        Func<bool> DontGet() => () => !get && navMeshAgent.enabled;
+        Func<bool> DoGet() => () => get && navMeshAgent.enabled;
+        Func<bool> DoGo() => () => go && navMeshAgent.enabled;
+        Func<bool> DoWait() => () => wait && navMeshAgent.enabled;
     }
+
+    public bool HasRoom
+    {
+        get
+        {
+            foreach (var room in RoomLister.Instance.rooms)
+            {
+                if (room.available && !room.GetCustomer())
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+
+    #region
     private void Start()
     {
         if (purchased)
         {
             purchaseBehaviour.Loaded();
             GetPurchased();
-        }
-    }
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.TryGetComponent(out CustomerBehaviour cb))
-        {
-            go = true;
         }
     }
     void Update() { stateMachine.Tick(); }
@@ -85,6 +94,67 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
     public void SetBool(bool set)
     {
         purchased = set;
+    }
+    #endregion
+}
+
+public class LobbyBoyWait : IState
+{
+    private LobbyBoyBehaviour lobbyBoy;
+    private NavMeshAgent navMeshAgent;
+
+    private bool turn;
+    private bool check;
+    private bool doOnce;
+
+
+    private Vector3 startPos;
+
+    public LobbyBoyWait(LobbyBoyBehaviour lobbyBoy, NavMeshAgent navMeshAgent, Vector3 startPos)
+    {
+        this.lobbyBoy = lobbyBoy;
+        this.navMeshAgent = navMeshAgent;
+        this.startPos = startPos;
+    }
+
+    public void OnEnter()
+    {
+        if (Vector3.Distance(lobbyBoy.transform.position, startPos) > 0.1f)
+            lobbyBoy.anim.SetBool("Walk", true);
+        if (navMeshAgent.enabled) navMeshAgent.SetDestination(startPos);
+        if (!doOnce)
+        {
+            doOnce = true;
+            turn = true;
+        }
+    }
+    public void OnExit()
+    {
+        turn = false;
+        check = false;
+    }
+
+    public void Tick()
+    {
+        if (navMeshAgent.hasPath && !check)
+        {
+            check = true;
+            turn = true;
+        }
+        if (!navMeshAgent.hasPath && turn)
+        {
+            turn = false;
+            lobbyBoy.anim.SetBool("Walk", false);
+            lobbyBoy.transform.DORotate(Vector3.up * 180, 0.5f);
+        }
+        if (lobbyBoy.HasRoom && Reception.Instance.customers.Count > 0)
+        {
+            if (Reception.Instance.customers[0].getColl.enabled)
+            {
+                lobbyBoy.wait = false;
+                lobbyBoy.get = true;
+            }
+        }
     }
 }
 
@@ -120,87 +190,32 @@ public class GetCustomer : IState
 
     public void Tick()
     {
-        if (!customer)
+        if (!customer || !lobbyBoy.HasRoom)
         {
             lobbyBoy.get = false;
+            lobbyBoy.wait = true;
             return;
         }
         if (customer.interacted)
         {
-            if (Reception.Instance.customers.Count > 0)
+            if (Reception.Instance.customers.Count > 0 && !lobbyBoy.customerGetter.GetCustomer())
             {
                 customer = Reception.Instance.customers[0];
                 navMeshAgent.SetDestination(customer.transform.position);
+                return;
             }
             else
             {
                 lobbyBoy.get = false;
+                lobbyBoy.wait = true;
+                return;
             }
         }
-    }
-}
-public class LobbyBoyWait : IState
-{
-    private LobbyBoyBehaviour lobbyBoy;
-    private NavMeshAgent navMeshAgent;
-
-    private bool hasRoom;
-    private bool turn;
-    private bool check;
-    private bool doOnce;
-
-
-    private Vector3 startPos;
-
-    public LobbyBoyWait(LobbyBoyBehaviour lobbyBoy, NavMeshAgent navMeshAgent, Vector3 startPos)
-    {
-        this.lobbyBoy = lobbyBoy;
-        this.navMeshAgent = navMeshAgent;
-        this.startPos = startPos;
-    }
-
-    public void OnEnter()
-    {
-        if (Vector3.Distance(lobbyBoy.transform.position, startPos) > 0.1f)
-            lobbyBoy.anim.SetBool("Walk", true);
-        if (navMeshAgent.enabled) navMeshAgent.SetDestination(startPos);
-        if (!doOnce)
+        if (lobbyBoy.customerGetter.GetCustomer())
         {
-            doOnce = true;
-            turn = true;
-        }
-    }
-    public void OnExit()
-    {
-        turn = false;
-        check = false;
-        hasRoom = false;
-    }
-
-    public void Tick()
-    {
-        if (navMeshAgent.hasPath && !check)
-        {
-            check = true;
-            turn = true;
-        }
-        if (!navMeshAgent.hasPath && turn)
-        {
-            turn = false;
-            lobbyBoy.anim.SetBool("Walk", false);
-            lobbyBoy.transform.DORotate(Vector3.up * 180, 0.5f);
-        }
-        foreach (var room in RoomLister.Instance.rooms)
-        {
-            if (room.available && !room.GetCustomer())
-            {
-                hasRoom = true;
-            }
-        }
-        if (hasRoom && Reception.Instance.customers.Count > 0)
-        {
-            if (Reception.Instance.customers[0].getColl.enabled)
-                lobbyBoy.get = true;
+            lobbyBoy.get = false;
+            lobbyBoy.go = true;
+            return;
         }
     }
 }
@@ -253,15 +268,22 @@ public class GoToRoom : IState
 
     public void Tick()
     {
+        if (!lobbyBoy.HasRoom)
+        {
+            lobbyBoy.go = false;
+            lobbyBoy.wait = true;
+        }
         if (check)
         {
             if (!navMeshAgent.hasPath && !lobbyBoy.customerGetter.GetCustomer())
             {
                 lobbyBoy.get = false;
                 lobbyBoy.go = false;
+                lobbyBoy.wait = true;
             }
             if (!navMeshAgent.hasPath && lobbyBoy.customerGetter.GetCustomer())
             {
+                lobbyBoy.anim.SetBool("Walk", false);
                 check = false;
                 FindRoom();
             }

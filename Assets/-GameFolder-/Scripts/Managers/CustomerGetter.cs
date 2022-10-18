@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class CustomerGetter : MonoBehaviour
 {
-    private CustomerBehaviour customer;
+    [SerializeField] private CustomerBehaviour customer;
     public bool isPlayer;
 
     public void SetCustomer(CustomerBehaviour customer)

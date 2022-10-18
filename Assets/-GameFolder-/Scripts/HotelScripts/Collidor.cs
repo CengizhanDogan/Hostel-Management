@@ -32,7 +32,7 @@ public class Collidor : MonoBehaviour, IPurchasable
     public void GetPurchased()
     {
         enabler.SetActive(true);
-        transform.DOScaleZ(1, 0.75f).SetEase(Ease.OutBounce).OnComplete(() =>
+        enabler.transform.DOScaleZ(1, 0.75f).SetEase(Ease.OutBounce).OnComplete(() =>
         {
             door.SetActive(true);
             foreach (Room room in rooms)
