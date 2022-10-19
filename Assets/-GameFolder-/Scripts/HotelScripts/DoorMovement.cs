@@ -39,7 +39,7 @@ public class DoorMovement : MonoBehaviour
             AudioManager.Instance.DoorSound();
             countDown = resetTime;
             rb.isKinematic = false;
-            DOTween.KillAll(transform);
+            transform.DOKill();
             StopAllCoroutines();
             StartCoroutine(ResetDoor());
         }

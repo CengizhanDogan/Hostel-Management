@@ -93,6 +93,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
                 if (roomValue > 5) audioManager.PlaySound(audioManager.MoneySound, 0.1f);
                 var spawnPos = manager.transform.position; spawnPos.y += 1;
                 var cash = PoolingSystem.Instance.InstantiateAPS("Cash", spawnPos);
+                cash.transform.localScale = Vector3.one * 2;
 
                 cash.transform.DOMove(transform.position, 0.5f)
                     .OnComplete(() => PoolingSystem.Instance.DestroyAPS(cash));

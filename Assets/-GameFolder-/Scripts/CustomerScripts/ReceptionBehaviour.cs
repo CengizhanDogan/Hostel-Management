@@ -32,7 +32,7 @@ public class ReceptionBehaviour : IState
     {
         customerBehaviour.areaTransform.DOScale(0.5f, 0.6f).SetEase(Ease.OutBack);
         customerBehaviour.customerAnimation.SetWalk(false);
-        transform.DOLookAt(reception.LookPos(transform.position.y), 0.5f);
+        transform.DOLookAt(reception.LookPos(transform.position.y), 0.25f);
         customerBehaviour.getColl.enabled = true;
         if (reception.customers.IndexOf(customerBehaviour) == 0) Bell.Instance.RingBell();
     }

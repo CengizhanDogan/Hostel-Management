@@ -9,9 +9,9 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 {
     private StateMachine stateMachine;
 
-    [HideInInspector] public bool get;
-    [HideInInspector] public bool wait;
-    [HideInInspector] public bool go;
+    public bool get;
+    public bool wait;
+    public bool go;
     private bool purchased;
 
     private PurchaseBehaviour purchaseBehaviour;
@@ -32,6 +32,7 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
 
         At(waitBehaviour, getCustomer, DoGet());
         At(getCustomer, goToRoom, DoGo());
+        At(waitBehaviour, goToRoom, DoGo());
         At(goToRoom, waitBehaviour, DoWait());
         At(getCustomer, waitBehaviour, DoWait());
 
@@ -73,7 +74,7 @@ public class LobbyBoyBehaviour : MonoBehaviour, IPurchasable
     public int GetCost(PurchaseBehaviour pb)
     {
         purchaseBehaviour = pb;
-        return 300;
+        return 400;
     }
 
     public void GetPurchased()
@@ -136,6 +137,12 @@ public class LobbyBoyWait : IState
 
     public void Tick()
     {
+        if (lobbyBoy.HasRoom && lobbyBoy.customerGetter.GetCustomer())
+        {
+            lobbyBoy.wait = false;
+            lobbyBoy.go = true;
+            return;
+        }
         if (navMeshAgent.hasPath && !check)
         {
             check = true;
@@ -153,6 +160,16 @@ public class LobbyBoyWait : IState
             {
                 lobbyBoy.wait = false;
                 lobbyBoy.get = true;
+                return;
+            }
+        }
+        if (lobbyBoy.HasRoom && Coaches.Instance.CustomerSeat() != null)
+        {
+            if (Coaches.Instance.CustomerSeat().customerBehaviour.getColl.enabled)
+            {
+                lobbyBoy.wait = false;
+                lobbyBoy.get = true;
+                return;
             }
         }
     }
@@ -162,21 +179,36 @@ public class GetCustomer : IState
 {
     private LobbyBoyBehaviour lobbyBoy;
     private NavMeshAgent navMeshAgent;
+    private Coaches coaches;
+    private Reception reception;
 
     private CustomerBehaviour customer;
+    private bool inReception;
+    private bool coach;
     public GetCustomer(LobbyBoyBehaviour lobbyBoy, NavMeshAgent navMeshAgent)
     {
         this.lobbyBoy = lobbyBoy;
         this.navMeshAgent = navMeshAgent;
+        coaches = Coaches.Instance;
+        reception = Reception.Instance;
     }
 
     public void OnEnter()
     {
-        if (Reception.Instance.customers.Count > 0)
+        if (reception.customers.Count > 0 && reception.customers[0].getColl.enabled)
         {
-            customer = Reception.Instance.customers[0];
+            customer = reception.customers[0];
             navMeshAgent.SetDestination(customer.transform.position);
             lobbyBoy.anim.SetBool("Walk", true);
+            inReception = true;
+        }
+        else if (coaches.CustomerSeat() != null)
+        {
+            var seat = coaches.CustomerSeat();
+            customer = seat.customerBehaviour;
+            navMeshAgent.SetDestination(seat.seatTransform.position);
+            lobbyBoy.anim.SetBool("Walk", true);
+            coach = true;
         }
         else
         {
@@ -184,15 +216,24 @@ public class GetCustomer : IState
         }
     }
 
-    public void OnExit()
-    {
-    }
+    public void OnExit() { }
 
     public void Tick()
     {
         if (!customer || !lobbyBoy.HasRoom)
         {
-            Debug.Log("Go Wait");
+            lobbyBoy.get = false;
+            lobbyBoy.wait = true;
+            return;
+        }
+        if (inReception && !reception.customers.Contains(customer))
+        {
+            lobbyBoy.get = false;
+            lobbyBoy.wait = true;
+            return;
+        }
+        if (coach && !coaches.HasCustomer(customer))
+        {
             lobbyBoy.get = false;
             lobbyBoy.wait = true;
             return;
@@ -201,14 +242,12 @@ public class GetCustomer : IState
         {
             if (Reception.Instance.customers.Count > 0 && !lobbyBoy.customerGetter.GetCustomer())
             {
-                Debug.Log("Get New");
                 customer = Reception.Instance.customers[0];
                 navMeshAgent.SetDestination(customer.transform.position);
                 return;
             }
             else if (!lobbyBoy.customerGetter.GetCustomer())
             {
-                Debug.LogWarning("No Customer");
                 lobbyBoy.get = false;
                 lobbyBoy.wait = true;
                 return;
@@ -216,9 +255,14 @@ public class GetCustomer : IState
         }
         if (lobbyBoy.customerGetter.GetCustomer())
         {
-            Debug.Log("GO ROOM");
             lobbyBoy.get = false;
             lobbyBoy.go = true;
+            return;
+        }
+        if (!customer.getColl.enabled)
+        {
+            lobbyBoy.get = false;
+            lobbyBoy.wait = true;
             return;
         }
     }
@@ -293,6 +337,13 @@ public class GoToRoom : IState
                 check = false;
                 FindRoom();
             }
+        }
+        if (lobbyBoy.customerGetter.GetCustomer().patiance <= 0)
+        {
+            lobbyBoy.customerGetter.SetCustomer(null);
+            lobbyBoy.get = false;
+            lobbyBoy.go = false;
+            lobbyBoy.wait = true;
         }
     }
 }

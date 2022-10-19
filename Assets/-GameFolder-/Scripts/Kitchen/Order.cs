@@ -10,6 +10,8 @@ public class Order : MonoBehaviour, IInteractable
     private Collider coll;
     public Room room;
     [SerializeField] private Transform tutorialTransform;
+
+   [HideInInspector] public Transform arrow;
     private void Start()
     {
         if (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel) > 2)
@@ -39,7 +41,7 @@ public class Order : MonoBehaviour, IInteractable
             if (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenTutorial) == 0)
             {
                 PlayerPrefs.SetInt(PlayerPrefKeys.KitchenTutorial, 1);
-                TutorialManager.Instance.KitchenTutorial(tutorialTransform);
+                TutorialManager.Instance.KitchenTutorial(this);
             }
         }
 
@@ -61,6 +63,7 @@ public class Order : MonoBehaviour, IInteractable
                 anim = interactor.GetComponentInChildren<PlayerAnimatorController>();
 
             SetBubbles(false);
+            if (arrow) Destroy(arrow.gameObject);
 
             var spawnPos = food.transform.position; spawnPos.y += 1.5f;
             var particle = PoolingSystem.Instance.InstantiateAPS("FoodSpark", spawnPos);

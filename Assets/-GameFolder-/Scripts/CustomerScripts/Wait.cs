@@ -6,8 +6,10 @@ using DG.Tweening;
 public class Wait : IState
 {
     private CustomerBehaviour customerBehaviour;
-    private ReceptionBehaviour reception;
+    private ReceptionBehaviour receptionBehaviour;
+    private Reception reception;
     private Timer timer;
+    private Coaches coaches;
     private float patiance;
 
     public bool reorder;
@@ -15,13 +17,14 @@ public class Wait : IState
     private bool spawnOnce;
     private bool spawnTwice;
 
-    public Wait(CustomerBehaviour customerBehaviour, ReceptionBehaviour reception, Timer timer)
+    public Wait(CustomerBehaviour customerBehaviour, ReceptionBehaviour receptionBehaviour, Timer timer)
     {
         this.customerBehaviour = customerBehaviour;
-        this.reception = reception;
+        this.receptionBehaviour = receptionBehaviour;
         this.timer = timer;
         patiance = customerBehaviour.patiance;
-        
+        coaches = Coaches.Instance;
+        reception = Reception.Instance;
     }
 
     public void OnEnter() 
@@ -44,14 +47,23 @@ public class Wait : IState
         var spawnPos = customerBehaviour.timerTransform.position; spawnPos.y += 0.5f;
         customerBehaviour.patiance -= Time.deltaTime;
 
+        if (reception.customers.IndexOf(customerBehaviour) == 0 && coaches.available)
+        {
+            foreach (var seat in coaches.seats)
+            {
+                if (seat.customerBehaviour == null)
+                {
+                    return;
+                }
+            }
+        }
         if (reorder)
         {
             reorder = false;
-            reception.end = false;
+            receptionBehaviour.end = false;
         }
         if (customerBehaviour.patiance <= 0 )
         {
-            
             timer.StopTimer();
             customerBehaviour.exit = true;
         }

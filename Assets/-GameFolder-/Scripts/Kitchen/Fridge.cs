@@ -10,6 +10,8 @@ public class Fridge : MonoBehaviour, IInteractable
     [SerializeField] private Food food;
     private Collider coll;
 
+    [HideInInspector]public Transform arrow;
+
     private void Start()
     {
         coll = GetComponent<Collider>();
@@ -26,6 +28,8 @@ public class Fridge : MonoBehaviour, IInteractable
         var spawnPos = fridge.position; spawnPos.y += 1f;
         var food = Instantiate(this.food, spawnPos, this.food.transform.rotation);
         delivery.SetFood(food);
+
+        if(arrow) Destroy(arrow.gameObject);
 
         fridgeDoor[0].DOLocalRotate(Vector3.up * 120, 0.5f)
             .OnComplete(() =>

@@ -28,7 +28,6 @@ public class CoinWorldToUIConverter : MonoBehaviour
 		{
 			PoolingSystem.Instance.DestroyAPS(gemImageGo);
 			PlayerPrefs.SetInt(PlayerPrefKeys.Coin, PlayerPrefs.GetInt(PlayerPrefKeys.Coin) + 1);
-			if (PlayerPrefs.GetInt(PlayerPrefKeys.Coin) == 50) EventManager.OnPurchaseEvent.Invoke(0, false);
 			foreach (var item in FindObjectOfType<LevelPanel>().inGameCoinTexts)
 			{
 				item.text = PlayerPrefs.GetInt(PlayerPrefKeys.Coin).ToString();

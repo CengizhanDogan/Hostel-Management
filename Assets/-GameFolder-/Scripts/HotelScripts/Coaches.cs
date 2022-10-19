@@ -2,12 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using System;
 
 public class Coaches : Singleton<Coaches>, IPurchasable
 {
     public bool available;
     private Vector3 scale;
     private PurchaseBehaviour purchaseBehaviour;
+    public List<CoachSeat> seats = new List<CoachSeat>();
     private void Awake()
     {
         scale = transform.localScale;
@@ -44,4 +46,48 @@ public class Coaches : Singleton<Coaches>, IPurchasable
     {
         available = set;
     }
+
+    public CoachSeat EmptySeat()
+    {
+        foreach (CoachSeat seat in seats)
+        {
+            if (seat.customerBehaviour == null)
+            {
+                return seat;
+            }
+        }
+
+        return null;
+    }
+    public CoachSeat CustomerSeat()
+    {
+        foreach (CoachSeat seat in seats)
+        {
+            if (seat.customerBehaviour)
+            {
+                return seat;
+            }
+        }
+
+        return null;
+    }
+
+    public bool HasCustomer(CustomerBehaviour customer)
+    {
+        foreach (CoachSeat seat in seats)
+        {
+            if (seat.customerBehaviour == customer)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}
+[Serializable]
+public class CoachSeat
+{
+    public Transform seatTransform;
+    public CustomerBehaviour customerBehaviour;
 }

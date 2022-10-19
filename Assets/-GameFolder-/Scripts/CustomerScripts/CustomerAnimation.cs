@@ -11,6 +11,11 @@ public class CustomerAnimation : MonoBehaviour
     }
     public void SetSleep(bool set)
     {
+        animator.SetBool("Sit", set);
         animator.SetBool("Sleep", set);
+    }
+    public void SetSit(bool set)
+    {
+        animator.SetBool("Sit", set);
     }
 }

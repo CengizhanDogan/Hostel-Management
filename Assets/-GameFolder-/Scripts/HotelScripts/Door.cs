@@ -11,6 +11,8 @@ public class Door : MonoBehaviour, IInteractable
     private Vector3 scale;
 
     [HideInInspector] public Collider coll;
+
+    [HideInInspector] public Transform arrow;
     private void Start()
     {
         room.door = this;
@@ -26,6 +28,7 @@ public class Door : MonoBehaviour, IInteractable
             {
                 if (manager.GetCustomer() == null || room.GetCustomer() != null) return;
 
+                if(arrow) Destroy(arrow.gameObject);
                 var customer = manager.GetCustomer();
                 customer.SetToRoom(room);
                 room.SetCustomer(customer);

@@ -13,14 +13,22 @@ public class PurchaseManager : Singleton<PurchaseManager>
 
     private SaveManager saveManager;
 
+    private Reception reception;
+
     private void Awake()
     {
         saveManager = SaveManager.Instance;
+        reception = Reception.Instance;
 
         SetPurchasables();
         SetUpgrades();
     }
-
+    private void Update()
+    {
+        if (reception.available) return;
+        if (PlayerPrefs.GetInt(PlayerPrefKeys.Coin) == 50)
+            EventManager.OnPurchaseEvent.Invoke(0, false);
+    }
     private void SetUpgrades()
     {
         var upgradeArray =

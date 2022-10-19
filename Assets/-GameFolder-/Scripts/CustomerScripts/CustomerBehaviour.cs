@@ -31,13 +31,9 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
     public Transform timerTransform;
     public Transform areaTransform;
 
-
+    [HideInInspector] public Transform arrow;
     private void Awake()
     {
-        if (Coaches.Instance.available)
-        {
-            patiance += patiance / 2;
-        }
         moneyCount = roomTime / 4;
         timer = Instantiate(timer, timerTransform.position, timer.transform.rotation);
         timer.timerObject = gameObject;
@@ -46,6 +42,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
         customerAnimation = GetComponent<CustomerAnimation>();
         var navMeshAgent = GetComponent<NavMeshAgent>();
+        var reception = Reception.Instance;
 
         roomBehaviour = gameObject.AddComponent<RoomBehaviour>();
         roomBehaviour.SetCustomerBehaviour(this);
@@ -56,10 +53,13 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
         wait = new Wait(this, receptionBehavior, timer);
         customerFollow = new CustomerFollow(navMeshAgent, this, timer);
         var exitHotel = new ExitHotel(transform.position, navMeshAgent, transform, this);
+        var coachBehavior = new CoachBehaviour(this, navMeshAgent, timer);
 
         At(receptionBehavior, wait, ReachedReception());
         At(wait, receptionBehavior, Reorder());
         At(wait, customerFollow, Getted());
+        At(wait, coachBehavior, HaveCoach());
+        At(coachBehavior, customerFollow, Getted());
         At(customerFollow, roomBehaviour, HasRoom());
 
         stateMachine.AddAnyTransition(exitHotel, ExitHotel());
@@ -73,6 +73,8 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
         Func<bool> Getted() => () => interacted;
         Func<bool> HasRoom() => () => room != null;
         Func<bool> ExitHotel() => () => exit;
+        Func<bool> HaveCoach() => () => reception.customers.IndexOf(this) == 0
+        && Coaches.Instance.EmptySeat() != null && Coaches.Instance.available;
     }
 
     private void Update() => stateMachine.Tick();
@@ -83,6 +85,7 @@ public class CustomerBehaviour : MonoBehaviour, IInteractable, ITimer
 
         if (manager.GetCustomer()) return;
 
+        if (arrow) Destroy(arrow.gameObject);
         customerFollow.manager = manager;
         interacted = true;
         getColl.enabled = false;
@@ -222,7 +225,7 @@ public class ExitHotel : IState
         {
             exited = true;
 
-            PoolingSystem.Instance.DestroyAPS(particle);
+            if (particle) PoolingSystem.Instance.DestroyAPS(particle);
 
             transform.DOScale(0, 0.5f).SetEase(Ease.InBack).OnComplete(() =>
             {

@@ -88,7 +88,7 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
             if (PlayerPrefs.GetInt(PlayerPrefKeys.CustomerTutorial) == 0)
             {
                 PlayerPrefs.SetInt(PlayerPrefKeys.CustomerTutorial, 1);
-                TutorialManager.Instance.CustomerTutorial(door.transform);
+                TutorialManager.Instance.CustomerTutorial(door);
             }
         });
         foreach (var longWall in longWalls)
