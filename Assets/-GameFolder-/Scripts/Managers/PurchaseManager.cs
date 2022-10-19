@@ -26,7 +26,7 @@ public class PurchaseManager : Singleton<PurchaseManager>
     private void Update()
     {
         if (reception.available) return;
-        if (PlayerPrefs.GetInt(PlayerPrefKeys.Coin) == 50)
+        if (PlayerPrefs.GetInt(PlayerPrefKeys.Coin) >= 45)
             EventManager.OnPurchaseEvent.Invoke(0, false);
     }
     private void SetUpgrades()

@@ -28,6 +28,7 @@ public class CameraManager : MonoBehaviour
         {
             StartCoroutine(SetCams());
             JoystickEnabler.Instance.SetJoystick(false);
+            PlayerStopper.Instance.SetWall();
             doOnce = true;
         }
     }
@@ -58,6 +59,7 @@ public class CameraManager : MonoBehaviour
 
         targets.Clear();
         JoystickEnabler.Instance.SetJoystick(true);
+        PlayerStopper.Instance.SetWall();
         mainCam.gameObject.SetActive(true);
         for (int i = 0; i < cams.Count; i++)
         {

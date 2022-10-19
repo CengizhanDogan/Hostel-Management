@@ -34,6 +34,6 @@ public class MoneyStack : MonoBehaviour
     }
     private void Update()
     {
-        if(PlayerPrefs.GetInt(PlayerPrefKeys.Coin) >= 50) Destroy(gameObject);
+        if(PlayerPrefs.GetInt(PlayerPrefKeys.Coin) >= 35) Destroy(gameObject);
     }
 }
