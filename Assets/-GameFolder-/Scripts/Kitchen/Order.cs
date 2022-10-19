@@ -48,6 +48,7 @@ public class Order : MonoBehaviour, IInteractable
         coll.enabled = set;
 
         transform.parent.DOScale(scale, 0.5f);
+        arrow.DOScale(scale, 0.5f);
     }
 
     public void Interact(Interactor interactor)

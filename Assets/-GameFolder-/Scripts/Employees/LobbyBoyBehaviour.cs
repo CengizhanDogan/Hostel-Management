@@ -324,18 +324,19 @@ public class GoToRoom : IState
         }
         if (check)
         {
-            if (!navMeshAgent.hasPath || !lobbyBoy.customerGetter.GetCustomer())
+            if (!lobbyBoy.HasRoom || !lobbyBoy.customerGetter.GetCustomer())
             {
                 lobbyBoy.get = false;
                 lobbyBoy.go = false;
                 lobbyBoy.wait = true;
                 return;
             }
-            if (!navMeshAgent.hasPath && lobbyBoy.customerGetter.GetCustomer())
+            if (lobbyBoy.HasRoom && lobbyBoy.customerGetter.GetCustomer())
             {
                 lobbyBoy.anim.SetBool("Walk", false);
                 check = false;
                 FindRoom();
+                return;
             }
         }
         if (lobbyBoy.customerGetter.GetCustomer().patiance <= 0)

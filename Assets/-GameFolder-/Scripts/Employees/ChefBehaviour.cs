@@ -9,16 +9,16 @@ public class ChefBehaviour : MonoBehaviour, IPurchasable
 {
     private StateMachine stateMachine;
 
-    [HideInInspector] public bool get;
-    [HideInInspector] public bool wait;
-    [HideInInspector] public bool go;
+    public bool get;
+    public bool wait;
+    public bool go;
     private bool purchased;
 
     public Kitchen kitchen;
 
     public Animator anim;
 
-    private FoodDelivery delivery;
+    [HideInInspector] public FoodDelivery delivery;
     private PurchaseBehaviour purchaseBehaviour;
 
     void Awake()
@@ -219,13 +219,15 @@ public class ServeFood : IState
             }
         }
 
+        if (!target)
+        {
+            chef.get = false;
+            chef.go = false;
+            return;
+        }
         navMeshAgent.SetDestination(target.door.transform.position);
         check = true;
         chef.anim.SetBool("Tray", true);
-        if (target) return;
-
-        chef.get = false;
-        chef.go = false;
     }
 
     public void OnExit()
@@ -241,7 +243,13 @@ public class ServeFood : IState
             {
                 chef.get = false;
                 chef.go = false;
+                return;
             }
+        }
+        if (!chef.delivery.GetFood())
+        {
+            chef.get = false;
+            chef.go = false;
         }
     }
 }

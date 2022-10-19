@@ -6,24 +6,24 @@ public class FoodOrder : MonoBehaviour
 {
     private CustomerBehaviour customer;
     private float roomTime;
-
+    private bool doOnce;
+    private float foodChance;
     public bool HasOrder { get; private set; }
     private bool MakeOrder
     {
         get
         {
             return customer.roomTime < roomTime
-                && customer.roomTime > roomTime / 3 
-                && Random.value < 0.001f
+                && foodChance < 0.5f
                 && Kitchen.Instance.available;
         }
     }
-    private bool doOnce;
 
     private void Start()
     {
         customer = GetComponent<CustomerBehaviour>();
         roomTime = customer.roomTime;
+        foodChance = Random.value;
     }
 
     private void Update()
