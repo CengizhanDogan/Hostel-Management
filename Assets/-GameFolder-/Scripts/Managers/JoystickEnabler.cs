@@ -4,10 +4,12 @@ using UnityEngine;
 
 public class JoystickEnabler : Singleton<JoystickEnabler>
 {
-    [SerializeField] private GameObject joystick;
-    
+    [SerializeField] private GameObject joystickObject;
+    [SerializeField] private Transform handle;
+
     public void SetJoystick(bool set)
     {
-        joystick.SetActive(set);
+        handle.localPosition = Vector3.zero;
+        joystickObject.SetActive(set);
     }
 }
