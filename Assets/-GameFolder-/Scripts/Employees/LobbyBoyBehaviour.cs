@@ -216,7 +216,10 @@ public class GetCustomer : IState
         }
     }
 
-    public void OnExit() { }
+    public void OnExit() 
+    {
+        inReception = false; coach = false;
+    }
 
     public void Tick()
     {
