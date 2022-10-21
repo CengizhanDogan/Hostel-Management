@@ -199,6 +199,8 @@ public class ServeFood : IState
     }
     private void Check()
     {
+        if (!chef.delivery.GetFood()) return;
+
         var closest = 99f;
         Room target = null;
         foreach (var room in RoomLister.Instance.rooms)
@@ -228,28 +230,31 @@ public class ServeFood : IState
         navMeshAgent.SetDestination(target.door.transform.position);
         check = true;
         chef.anim.SetBool("Tray", true);
+
     }
 
     public void OnExit()
     {
-        chef.anim.SetBool("Tray", false);
     }
 
     public void Tick()
     {
-        if (check)
-        {
-            if (!navMeshAgent.hasPath || !foodOrder.HasOrder)
-            {
-                chef.get = false;
-                chef.go = false;
-                return;
-            }
-        }
         if (!chef.delivery.GetFood())
         {
             chef.get = false;
             chef.go = false;
+            
+            chef.anim.SetBool("Tray", false);
+            return;
+        }
+        else if (check)
+        {
+            if ((!navMeshAgent.hasPath || !foodOrder.HasOrder) && chef.delivery.GetFood())
+            {
+                check = false;
+                Check();
+                return;
+            }
         }
     }
 }

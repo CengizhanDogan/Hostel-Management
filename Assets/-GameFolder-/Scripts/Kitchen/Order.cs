@@ -58,7 +58,7 @@ public class Order : MonoBehaviour, IInteractable
             DOTween.Complete(this);
             Food food = delivery.GetFood();
             if (!food) return;
-
+            delivery.SetFood(null);
             PlayerAnimatorController anim = null;
             if (interactor.TryGetComponent(out CustomerGetter cg))
                 anim = interactor.GetComponentInChildren<PlayerAnimatorController>();
@@ -75,7 +75,7 @@ public class Order : MonoBehaviour, IInteractable
                 PoolingSystem.Instance.DestroyAPS(particle));
 
                 if (anim) anim.SetTrayAnimation(false);
-                delivery.SetFood(null);
+                
                 Destroy(food.gameObject);
             });
 
