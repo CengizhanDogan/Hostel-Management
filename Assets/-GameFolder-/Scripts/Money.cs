@@ -30,7 +30,8 @@ public class Money : MonoBehaviour, IInteractable
         }
         var audioManager = AudioManager.Instance;
         audioManager.PlaySound(audioManager.MoneySound, 0.1f);
-        EventManager.OnGemCollected.Invoke(transform.position, () => { });
+        EventManager.OnGemCollected.Invoke(pos, () => { });
+
         if (isPlaced) Destroy(gameObject);
         else PoolingSystem.Instance.DestroyAPS(gameObject);
     }

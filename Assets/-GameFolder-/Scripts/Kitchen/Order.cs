@@ -11,7 +11,7 @@ public class Order : MonoBehaviour, IInteractable
     public Room room;
     [SerializeField] private Transform tutorialTransform;
 
-   [HideInInspector] public Transform arrow;
+    [HideInInspector] public Transform arrow;
     private void Start()
     {
         if (PlayerPrefs.GetInt(PlayerPrefKeys.KitchenLevel) > 2)
@@ -48,7 +48,7 @@ public class Order : MonoBehaviour, IInteractable
         coll.enabled = set;
 
         transform.parent.DOScale(scale, 0.5f);
-        arrow.DOScale(scale, 0.5f);
+        if (arrow) arrow.DOScale(scale, 0.5f);
     }
 
     public void Interact(Interactor interactor)

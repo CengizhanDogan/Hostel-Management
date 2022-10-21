@@ -26,10 +26,13 @@ public class Bell : Singleton<Bell>
         transform.DOComplete(this);
         bellRing.Play();
         float blendValue = 0f;
-        transform.localScale = scale;
+        
         exclamationBubble.DOScale(bubbleScale, 0.5f).SetEase(Ease.OutBounce);
 
-        transform.DOScale(scale + Vector3.one * 1.025f, 0.5f).SetEase(Ease.OutBounce);
+        transform.DOScale(scale + Vector3.one * 1.025f, 0.5f).SetEase(Ease.OutBounce).OnComplete(() =>
+        {
+            transform.localScale = scale;
+        });
 
         DOTween.To(() => blendValue, x => blendValue = x, 100, 0.25f)
             .OnUpdate(() => rend.SetBlendShapeWeight(0, blendValue))

@@ -27,6 +27,7 @@ public class CoachBehaviour : IState
     }
     public void OnEnter()
     {
+        customer.patiance = 100;
         foreach (var customer in Reception.Instance.customers)
         {
             customer.SetReorder();
@@ -37,14 +38,17 @@ public class CoachBehaviour : IState
 
         seat.customerBehaviour = customer;
         reception.customers.Remove(customer);
-        nav.SetDestination(seat.seatTransform.position);
+        nav.SetDestination(seat.seatTransform.position); 
     }
 
     public void OnExit()
     {
-        customer.transform.position = startPos;
+        customer.transform.DOKill();
+        animate = false;
+        //customer.transform.position = startPos;
         nav.enabled = true;
         customer.customerAnimation.SetSit(false);
+        customer.customerAnimation.SetWalk(true);
         seat.customerBehaviour = null;
     }
 

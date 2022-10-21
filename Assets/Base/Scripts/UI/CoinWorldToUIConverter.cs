@@ -23,6 +23,7 @@ public class CoinWorldToUIConverter : MonoBehaviour
 		Vector3 gemUIPosition = WorldToUISpace(Canvas, gemPosition);
 		GameObject gemImageGo = PoolingSystem.Instance.InstantiateAPS("CoinImage", gemUIPosition);
 		gemImageGo.transform.SetParent(GemImageTarget.transform);
+		gemImageGo.transform.localScale = Vector3.one;
 		gemImageGo.transform.DOMove(GemImageTarget.transform.position, GEM_MOVEMENT_DURATION).SetEase(Ease.InCirc)
 		.OnComplete(() =>
 		{
