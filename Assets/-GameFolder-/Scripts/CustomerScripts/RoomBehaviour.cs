@@ -96,6 +96,7 @@ public class WonderRoom : IState
     }
     public void OnEnter()
     {
+        customerBehaviour.customerAnimation.SetWalk(true);
         startTime = roomBehaviour.roomTime;
         roomBehaviour.slept = true;
         Wonder();
@@ -167,6 +168,7 @@ public class Sleep : IState
     }
     public void OnEnter()
     {
+        customerBehaviour.customerAnimation.SetWalk(true);
         navMeshAgent.SetDestination(room.sitTransform.position);
         room.cloud.SetCloud(true);
     }
@@ -186,6 +188,7 @@ public class Sleep : IState
     {
         if (!navMeshAgent.hasPath && !animating)
         {
+            customerBehaviour.customerAnimation.SetWalk(false);
             startPos = transform.position;
             animating = true;
             navMeshAgent.enabled = false;
