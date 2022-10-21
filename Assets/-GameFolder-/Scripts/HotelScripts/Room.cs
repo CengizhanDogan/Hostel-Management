@@ -97,7 +97,7 @@ public class Room : MonoBehaviour, IPurchasable, ITimer
         }
         if (purchaseBehaviour)
         {
-            GameAnalytics.NewResourceEvent(GAResourceFlowType.Source, "Room", 1, "element", "0003");
+            GameAnalytics.NewDesignEvent("Room", 1);
         }
     }
 

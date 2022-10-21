@@ -31,6 +31,7 @@ public class CoachBehaviour : IState
         {
             customer.SetReorder();
         }
+        timer.StopTimer();
         seat = Coaches.Instance.EmptySeat();
         customer.customerAnimation.SetWalk(true);
 
@@ -50,7 +51,6 @@ public class CoachBehaviour : IState
     public void Tick()
     {
         var spawnPos = customer.timerTransform.position; spawnPos.y += 0.5f;
-        customer.patiance -= Time.deltaTime / 4;
 
         if (nav.hasPath) animate = true;
         if (!nav.hasPath && animate)
@@ -66,25 +66,6 @@ public class CoachBehaviour : IState
                 customer.getColl.enabled = true;
                 customer.areaTransform.DOScale(0.5f, 0.6f).SetEase(Ease.OutBack);
             });
-        }
-        if (customer.patiance <= 0)
-        {
-            timer.StopTimer();
-            customer.exit = true;
-        }
-        if (customer.patiance <= patiance / 2 && !spawnOnce)
-        {
-            spawnOnce = true;
-
-            var particle = PoolingSystem.Instance.InstantiateAPS("Angry2", spawnPos);
-            particle.transform.DOScale(1.25f, 5f).OnComplete(() => PoolingSystem.Instance.DestroyAPS(particle));
-        }
-        if (customer.patiance <= patiance / 4 && !spawnTwice)
-        {
-            spawnTwice = true;
-
-            var particle = PoolingSystem.Instance.InstantiateAPS("Angry", spawnPos);
-            particle.transform.DOScale(1.25f, 5f).OnComplete(() => PoolingSystem.Instance.DestroyAPS(particle));
         }
     }
 }

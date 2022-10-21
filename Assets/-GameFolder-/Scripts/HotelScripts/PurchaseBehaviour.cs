@@ -117,7 +117,7 @@ public class PurchaseBehaviour : MonoBehaviour, IInteractable, IExitable
                 }
                 gameObject.SetActive(false);
 
-                GameAnalytics.NewResourceEvent(GAResourceFlowType.Undefined, "money", PlayerPrefs.GetInt(PlayerPrefKeys.Coin), "currency", "0001");
+                GameAnalytics.NewDesignEvent("money", PlayerPrefs.GetInt(PlayerPrefKeys.Coin));
                 yield break;
             }
             yield return new WaitForSeconds(1f / loopValue);

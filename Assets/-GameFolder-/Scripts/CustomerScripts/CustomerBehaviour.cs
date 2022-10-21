@@ -189,6 +189,7 @@ public class ExitHotel : IState
                 else PlayerPrefs.SetInt(PlayerPrefKeys.HostelStarLevel,
                     100);
 
+                
 
                 particle = PoolingSystem.Instance.InstantiateAPS("Happy", customerBehaviour.timerTransform.position);
 

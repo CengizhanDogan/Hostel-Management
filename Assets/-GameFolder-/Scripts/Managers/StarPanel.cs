@@ -44,7 +44,7 @@ public class StarPanel : MonoBehaviour
         if (lastStarValue != starValue)
         {
             lastStarValue = starValue;
-            GameAnalytics.NewResourceEvent(GAResourceFlowType.Undefined, "StarLevel", starValue, "level", "0002");
+            GameAnalytics.NewDesignEvent("StarLevel", starValue);
         }
     }
 }
