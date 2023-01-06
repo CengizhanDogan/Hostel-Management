@@ -41,7 +41,7 @@ public class Kitchen : Singleton<Kitchen>, IPurchasable
         });
         foreach (var longWall in longWalls)
         {
-            longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack).OnComplete(() => Destroy(longWall.gameObject));
+            longWall.DOMoveY(-4, 1f).SetEase(Ease.OutBack);
         }
     }
 

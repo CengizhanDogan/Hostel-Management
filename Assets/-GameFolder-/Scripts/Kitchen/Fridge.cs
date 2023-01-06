@@ -10,7 +10,7 @@ public class Fridge : MonoBehaviour, IInteractable
     [SerializeField] private Food food;
     private Collider coll;
 
-    [HideInInspector]public Transform arrow;
+    [HideInInspector] public Transform arrow;
 
     private void Start()
     {
@@ -18,43 +18,59 @@ public class Fridge : MonoBehaviour, IInteractable
     }
     public void Interact(Interactor interactor)
     {
-        var delivery = interactor.GetComponent<FoodDelivery>();
-        if (delivery.GetFood()) return;
-
+        int carryInt;
         PlayerAnimatorController anim = null;
         if (interactor.TryGetComponent(out CustomerGetter cg))
-            anim = interactor.GetComponentInChildren<PlayerAnimatorController>();
-
-        var spawnPos = fridge.position; spawnPos.y += 1f;
-        var food = Instantiate(this.food, spawnPos, this.food.transform.rotation);
-        delivery.SetFood(food);
-
-        if(arrow) Destroy(arrow.gameObject);
-
-        fridgeDoor[0].DOLocalRotate(Vector3.up * 120, 0.5f)
-            .OnComplete(() =>
-            {
-                StartCoroutine(SendFood(food, delivery, interactor));
-                if (anim) anim.SetTrayAnimation(true);
-            });
-        if (fridgeDoor.Count > 1)
         {
-            fridgeDoor[1].DOLocalRotate(Vector3.up * -120, 0.5f)
+            anim = interactor.GetComponentInChildren<PlayerAnimatorController>();
+            carryInt = PlayerPrefs.GetInt(PlayerPrefKeys.PlayerCarryCount) + 1;
+        }
+        else
+        {
+            carryInt = PlayerPrefs.GetInt(PlayerPrefKeys.CookCarryCount) + 1;
+        }
+
+
+        for (int i = 0; i < carryInt; i++)
+        {
+            var delivery = interactor.GetComponent<FoodDelivery>();
+            if (delivery.FoodCount >= carryInt) return;
+
+            var spawnPos = fridge.position; spawnPos.y += 1f;
+            var food = Instantiate(this.food, spawnPos, this.food.transform.rotation);
+            delivery.SetFood(food);
+
+            if (arrow) Destroy(arrow.gameObject);
+
+            fridgeDoor[0].DOLocalRotate(Vector3.up * 120, 0.5f)
                 .OnComplete(() =>
                 {
                     StartCoroutine(SendFood(food, delivery, interactor));
                     if (anim) anim.SetTrayAnimation(true);
                 });
+            if (fridgeDoor.Count > 1)
+            {
+                fridgeDoor[1].DOLocalRotate(Vector3.up * -120, 0.5f)
+                    .OnComplete(() =>
+                    {
+                        StartCoroutine(SendFood(food, delivery, interactor));
+                        if (anim) anim.SetTrayAnimation(true);
+                    });
+            }
         }
     }
 
     private IEnumerator SendFood(Food food, FoodDelivery delivery, Interactor interactor)
     {
-        while (Vector3.Distance(food.transform.position, delivery.CarryTransform.position) > 0.25f)
+        Vector3 pos = delivery.CarryTransform.position;
+        while (Vector3.Distance(food.transform.position, pos) > 0.01f)
         {
+            pos = delivery.CarryTransform.position;
+            pos.y += delivery.GetFoodOrder(food) * 0.15f;
+
             food.transform.position =
                 Vector3.Lerp(food.transform.position,
-                delivery.CarryTransform.position, 20 * Time.deltaTime);
+                pos, 20 * Time.deltaTime);
             yield return null;
         }
 

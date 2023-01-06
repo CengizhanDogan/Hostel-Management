@@ -7,7 +7,11 @@ public class FoodDelivery : MonoBehaviour
     [SerializeField] private Transform carryTransform;
     public Transform CarryTransform { get { return carryTransform; } }
 
-    private Food food;
-    public void SetFood(Food food) { this.food = food; }
-    public Food GetFood() { return food; }
+    private List<Food> foods = new List<Food>();
+    public int FoodCount { get => foods.Count; }
+
+    public void SetFood(Food food) { foods.Add(food); }
+    public Food GetFood() { return foods[FoodCount - 1]; }
+    public void RemoveFood() { foods.Remove(GetFood()); }
+    public int GetFoodOrder(Food food) { return foods.IndexOf(food); }
 }

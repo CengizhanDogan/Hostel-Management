@@ -18,4 +18,11 @@ public static class PlayerPrefKeys
     public static readonly string Save = "Save";
     public static readonly string KitchenTutorial = "KitchenTutorial";
     public static readonly string CustomerTutorial = "CustomerTutorial";
+    #region Upgrades 
+    public static readonly string PlayerCarryCount = "CarryCount";
+    public static readonly string CookCarryCount = "CarryCount";
+    public static readonly string PlayerSpeed = "PlayerSpeed";
+    public static readonly string CookSpeed = "CookSpeed";
+    public static readonly string LobbyBoySpeed = "LobbyBoySpeed";
+    #endregion
 }

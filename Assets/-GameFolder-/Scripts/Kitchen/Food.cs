@@ -14,6 +14,8 @@ public class Food : MonoBehaviour
     void Update()
     {
         if (!follow) return;
-        transform.position = followTransform.position;
+        Vector3 followPos = followTransform.position;
+        followPos.y = transform.position.y;
+        transform.position = followPos;
     }
 }
